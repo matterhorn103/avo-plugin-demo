@@ -1,0 +1,53 @@
+[project]
+name = "plugin-demo"
+version = "0.1.0"
+description = "A simple Python plugin for Avogadro 2 to demonstrate the revamped plugin API in v2.0 onwards"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "platformdirs>=4.2.0",
+]
+
+[project.scripts]
+plugin-demo = "avo_plugin_demo.__main__:main"
+
+[tool.avogadro]
+plugin-config = true
+pass-config = 0
+
+[tool.avogadro.pixi]
+channels = [ "conda-forge" ]
+
+[tool.avogadro.pixi.dependencies]
+numpy = ">=2.2.0"
+
+[[tool.avogadro.commands]]
+name = "transmute"
+display-name = "Transmute into gold"
+menu-path = [ "Build", 300 ]
+
+[[tool.avogadro.commands]]
+name = "movex"
+display-name = "Move X"
+menu-path = [ "Extensions", 500, "Demo", 220 ]
+
+[[tool.avogadro.commands]]
+name = "movey"
+display-name = "Move Y"
+menu-path = [ "Extensions", 500, "Demo", 210 ]
+
+[[tool.avogadro.commands]]
+name = "move"
+display-name = "Move"
+menu-path = [ "Extensions", 500, "Demo", 200 ]
+pass-config = 2
+
+[[tool.avogadro.commands]]
+name = "hello"
+display-name = "Say Hello"
+menu-path = [ "Extensions", 500, "Demo", 100 ]
+pass-config = 1
+
+[[tool.avogadro.generators]]
+name = "qavocado"
+display-name = "Quantum Avocado"
