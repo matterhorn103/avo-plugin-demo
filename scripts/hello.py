@@ -9,10 +9,10 @@
 # display-name = "Yell Hello"
 # menu-path = [ "Extensions", 900 ]
 # 
-# [tool.avogadro.pixi]
+# [tool.pixi]
 # channels = ["conda-forge"]
 #
-# [tool.avogadro.pixi.dependencies]
+# [tool.pixi.dependencies]
 # numpy = ">=2.2.0"
 # ///
 
