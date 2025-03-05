@@ -15,10 +15,10 @@ plugin-demo = "avo_plugin_demo.__main__:main"
 plugin-config = true
 pass-config = 0
 
-[tool.avogadro.pixi]
+[tool.pixi]
 channels = [ "conda-forge" ]
 
-[tool.avogadro.pixi.dependencies]
+[tool.pixi.dependencies]
 numpy = ">=2.2.0"
 
 [[tool.avogadro.commands]]
