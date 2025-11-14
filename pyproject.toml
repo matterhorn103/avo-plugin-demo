@@ -1,53 +1,78 @@
 [project]
+# These fields are required:
 name = "plugin-demo"
 version = "0.1.0"
 description = "A simple Python plugin for Avogadro 2 to demonstrate the revamped plugin API in v2.0 onwards"
+# These fields are optional:
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.10"  # Please follow the Avogadro Python version policy!
 dependencies = [
     "platformdirs>=4.2.0",
-]
+]  # Dependencies that should be sourced from PyPI, the Python Package Index
 
+# Define the entry point for the plugin
+# The key is the command, which must be the plugin's name, prefixed with `avogadro-`
+# The entry point itself can be any function you like from within your package
 [project.scripts]
-plugin-demo = "avo_plugin_demo.__main__:main"
+avogadro-plugin-demo = "plugin_demo:main"
 
-[tool.avogadro]
-plugin-config = true
-pass-config = 0
-
+# The [tool.pixi] tables are only necessary if your plugin needs to use Conda dependencies
 [tool.pixi]
 channels = [ "conda-forge" ]
 
 [tool.pixi.dependencies]
-numpy = ">=2.2.0"
+xtb = ">=6.7.1,<7"
+
+# The [tool.avogadro] table tells Avogadro what your plugin needs
+[tool.avogadro]
+plugin-config = true                # Whether Avogadro should store configuration of your plugin
+avogadro-config = [ "MainWindow" ]  # Any other tables from Avogadro's config that your plugin should receive
+
+# List the functionality your plugin provides as entries under the appropriate type
+# Each entry must specify a `subcommand`, which is the subcommand used
+# by Avogadro when running your plugin
+# e.g. the first entry will be called using `avogadro-plugin-demo get-charges [ARGS]`
+[[tool.avogadro.charges]]
+subcommand = "get-charges"
+method-name = "Löwdiken analysis"
 
 [[tool.avogadro.commands]]
-name = "transmute"
-display-name = "Transmute into gold"
-menu-path = [ "Build", 300 ]
+subcommand = "transmute"
+path.menu = "Build"  # The menu within which the command's menu entry should appear
+path.entry = { label = "Transmute into gold", priority = 300 }  # The text for the command's menu entry and its position within "Build"
 
 [[tool.avogadro.commands]]
-name = "movex"
-display-name = "Move X"
-menu-path = [ "Extensions", 500, "Demo", 220 ]
+subcommand = "movex"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }  # Priority determines the position of "Demo" within "Extensions"
+path.entry = { label = "Move X", priority = 220 }  # Priority determines the position of "Move X" within "Demo"
 
 [[tool.avogadro.commands]]
-name = "movey"
-display-name = "Move Y"
-menu-path = [ "Extensions", 500, "Demo", 210 ]
+subcommand = "movey"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }
+path.entry = { label = "Move Y", priority = 210 }
 
 [[tool.avogadro.commands]]
-name = "move"
-display-name = "Move"
-menu-path = [ "Extensions", 500, "Demo", 200 ]
-pass-config = 2
+subcommand = "move"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }
+path.entry = { label = "Move", priority = 200 }
 
 [[tool.avogadro.commands]]
-name = "hello"
-display-name = "Say Hello"
-menu-path = [ "Extensions", 500, "Demo", 100 ]
-pass-config = 1
+subcommand = "hello"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }
+path.entry = { label = "Say Hello", priority = 100 }
+
+[[tool.avogadro.energy]]
+subcommand = "aura"
+method-name = "Molecular aura"
+
+[[tool.avogadro.formats]]
+subcommand = "lor"
+format-name = "Lorentzian output format"
 
 [[tool.avogadro.generators]]
-name = "qavocado"
-display-name = "Quantum Avocado"
+subcommand = "qavocado"
+program-name = "Quantum Avocado"
