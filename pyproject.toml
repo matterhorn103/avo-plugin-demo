@@ -10,6 +10,11 @@ dependencies = [
     "platformdirs>=4.2.0",
 ]  # Dependencies that should be sourced from PyPI, the Python Package Index
 
+# Some build system is always required, but you are welcome to choose whichever
+[build-system]
+requires = ["uv_build>=0.8.18,<0.9.0"]
+build-backend = "uv_build"
+
 # Define the entry point for the plugin
 # The key is the command, which must be the plugin's name, prefixed with `avogadro-`
 # The entry point itself can be any function you like from within your package
