@@ -20,14 +20,14 @@ Information about and examples of (Python) plugins for Avogadro 2 to demonstrate
     3. Pixi project
 - Note: unlike Avogadro 1.102 and earlier, single-file scripts with no metadata are no longer allowed – all scripts must be within their own folder with a metadata file, making them a proper plugin (even if the folder only contains a single script)
 
-#### Script plugins (`py-script`)
+#### Script plugins (`pyscript`)
 
 - A script plugin consists of one or more Python scripts collected into a single bundle in a folder, allowing for easy installation, deinstallation, management, and distribution
 - Regardless of the number of scripts, a *single* metadata file (see below) is required for the plugin as a whole and must be located in the folder next to the scripts
 - The plugin is not allowed to have any dependencies
 - Script plugins are invoked by Avogadro by each script being run individually via the **script API**
 
-#### Package plugins (`py-pkg`)
+#### Package plugins (`pypkg`)
 
 - A package plugin for Avogadro is essentially a standard Python package as found in the wider ecosystem -- specifically, it consists of a directory that contains the source code for a Python *distribution* package, that can be built and installed by `pip`, `poetry`, `uv` etc.
 - Metadata for Avogadro is generally contained in the package's `pyproject.toml`
@@ -40,7 +40,7 @@ Information about and examples of (Python) plugins for Avogadro 2 to demonstrate
     2. A plugin-specific environment contained within the plugin's own folder
 - Package plugins are invoked by Avogadro using the **package API**
 
-#### Pixi project (`py-pixi`)
+#### Pixi project (`pypixi`)
 
 - Pixi project plugins consist of a single directory containing a Pixi project, with a `pyproject.toml` file used as the Pixi environment manifest
 - Metadata for Avogadro is generally contained in the project's `pyproject.toml`

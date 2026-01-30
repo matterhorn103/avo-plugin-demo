@@ -1,0 +1,94 @@
+[project]
+# These fields are required:
+name = "pypixi-demo"
+version = "0.1.0"
+description = "An example Pixi project plugin for Avogadro 2 to demonstrate the revamped plugin API in v2.0 onwards"
+authors = [
+    { name = "Amedeo Avogadro", email = "avogadro@unito.it" }
+]
+# These fields are optional:
+readme = "README.md"
+requires-python = ">=3.10"  # If you choose to specify this, please follow the Avogadro Python version policy!
+dependencies = [
+    "platformdirs>=4.2.0",
+]  # Dependencies that should be sourced from PyPI, the Python Package Index
+
+# Define the entry point for the plugin
+# The key is the command, which must be the plugin's name, prefixed with `avogadro-`
+# The entry point itself can be any function you like from within your package
+[project.scripts]
+avogadro-pypkg-demo = "pypkg_demo:main"
+
+# Some build system is always required for a package, but you are welcome to
+# choose whichever you like, it doesn't have to be uv_build
+# It is recommended to specify one, but it is not required - if none is given
+# then a default will be used
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+
+[tool.pixi]
+channels = ["conda-forge"]
+
+# Any Conda dependencies that your plugin needs
+[tool.pixi.dependencies]
+xtb = ">=6.7.1,<7"
+
+# This is required for Avogadro to be able to run your plugin using the package API
+[tool.pixi.pypi-dependencies]
+pypixi_demo = { path = ".", editable = true }
+
+
+# The [tool.avogadro] table tells Avogadro what your plugin needs and what it can do
+[tool.avogadro]
+plugin-config = true  # Whether Avogadro should store configuration of your plugin
+
+# List the features your plugin provides as entries under the appropriate feature type
+# Each entry must specify an `identifier`, which is the subcommand used
+# by Avogadro when running your plugin
+# e.g. the first entry will be called using `avogadro-pypixi-demo get-charges [ARGS]`
+[[tool.avogadro.charges]]
+identifier = "get-charges"
+method-name = "Löwdiken analysis"
+
+[[tool.avogadro.commands]]
+identifier = "transmute"
+path.menu = "Build"  # The menu within which the command's menu entry should appear
+path.entry = { label = "Transmute into gold", priority = 300 }  # The text for the command's menu entry and its position within "Build"
+
+[[tool.avogadro.commands]]
+identifier = "movex"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }  # Priority determines the position of "Demo" within "Extensions"
+path.entry = { label = "Move X", priority = 220 }  # Priority determines the position of "Move X" within "Demo"
+
+[[tool.avogadro.commands]]
+identifier = "movey"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }
+path.entry = { label = "Move Y", priority = 210 }
+
+[[tool.avogadro.commands]]
+identifier = "move"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }
+path.entry = { label = "Move", priority = 200 }
+
+[[tool.avogadro.commands]]
+identifier = "hello"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }
+path.entry = { label = "Say Hello", priority = 100 }
+
+[[tool.avogadro.energy]]
+identifier = "aura"
+method-name = "Molecular aura"
+
+[[tool.avogadro.formats]]
+identifier = "lor"
+format-name = "Lorentzian output format"
+
+[[tool.avogadro.generators]]
+identifier = "qavocado"
+program-name = "Quantum Avocado"
