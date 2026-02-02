@@ -1,8 +1,6 @@
 # SPDX-License-Identifier: BSD 3-Clause
 """Calculate atomic partial charges using a local installation of xtb."""
 
-import argparse
-import json
 import sys
 import os
 from shutil import which
@@ -47,8 +45,9 @@ def charges():
 
     # run xtb
     xtb = which("xtb")
-    if xtb is None:  # we check again
-        return ""
+    if xtb is None:
+        # Can't work if xtb is missing!
+        raise Exception("Local installation of xtb not found!")
 
     # for now, ignore the output itself
     tempdir = tempfile.mkdtemp()
@@ -85,24 +84,4 @@ def potential():
     # at the moment, xtb doesn't have a good way to do this
     # and the method shouldn't be called anyway
 
-    # if your plugin has a potential, you can return it here
-    # .. you'll get JSON with the file and the set of points
-    #   e.g. { "xyz" : "xyz file contents", "points" : [ x,y,z, x,y,z, ... ] }
-    #    or  { "sdf" : "sdf file contents", "points" : [ x,y,z, x,y,z, ... ] }
-    # .. and you print the list of potentials to stdout
     return ""
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser("GFN2 partial charges")
-    parser.add_argument("--display-name", action="store_true")
-    parser.add_argument("--metadata", action="store_true")
-    parser.add_argument("--charges", action="store_true")
-    parser.add_argument("--potential", action="store_true")
-    parser.add_argument("--lang", nargs="?", default="en")
-    args = parser.parse_args()
-
-    if args.charges:
-        print(charges())
-    if args.potential:
-        print(potential())

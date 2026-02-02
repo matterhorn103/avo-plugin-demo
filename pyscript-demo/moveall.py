@@ -5,11 +5,10 @@ import argparse
 import json
 
 
-def move_atoms(cjson: dict):
+def move_atoms(cjson: dict, atoms: list[int]):
     # The coordinates are a simple list i.e. [x0, y0, z0, x1, y1, z1, x2, …]
-    # so the x-coordinates of atoms n are at index 3n
-    n_atoms = len(cjson["atoms"]["elements"]["number"])
-    for n in range(n_atoms):
+    # so the x-coordinate of atom n is at index 3n
+    for n in atoms:
         cjson["atoms"]["coords"]["3d"][n * 3] += 1
 
 
@@ -22,10 +21,20 @@ if __name__ == "__main__":
     # Read input from Avogadro
     avo_input = json.loads(args.input)
     cjson = avo_input["cjson"]
-    requested_atom = avo_input["options"]["selection"]
+    # Get selected atoms
+    selected = []
+    selected_flags = cjson["atoms"]["selected"]  # 1 for selected, 0 for not
+    n_atoms = len(selected_flags)
+    for i, status in enumerate(selected_flags):
+        if status == 1:
+            selected.append(i)
+    # If nothing is selected, move everything
+    if len(selected) == 0:
+        n_atoms = len(cjson["atoms"]["elements"]["number"])
+        selected = list(range(n_atoms))
 
     # Make the change
-    move_atoms(cjson)
+    move_atoms(cjson, atoms=selected)
     # Be careful, because the atoms' positions have now been changed in the
     # original data (`avo_input`) too!
     # Often, you will want to avoid this by using `deepcopy()`
