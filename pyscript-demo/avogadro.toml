@@ -1,4 +1,4 @@
-# First some general metadata
+# First, some general metadata
 
 # These fields are required:
 name = "pyscript-demo"
@@ -7,58 +7,119 @@ description = "An example Python script plugin for Avogadro 2 to demonstrate the
 authors = [
     { name = "Amedeo Avogadro", email = "avogadro@unito.it" }
 ]
+license = "BSD-3-Clause"  # An SPDX license identifier, see https://spdx.org/licenses/
 # These fields are optional:
 readme = "README.md"
 
 # Second, tell Avogadro what your plugin needs and what it can do
 
-plugin-config = true  # Whether Avogadro should store configuration of your plugin
+plugin-type = "pyscript"
 
-# List the features your plugin provides as entries under the appropriate feature type
-# Each entry must specify an `identifier`, which must be the name of the script
+# Configuration options that Avogadro should store on behalf of your plugin
+[user-config]
+hello_repeats = { type = "integer", default = 1, minimum = 1, maximum = 5 }  # See `hello.py` for how this is used
+
+# Features provided by the plugin are listed in arrays of tables, by feature type
+# See https://toml.io/en/v1.0.0#array-of-tables
+
+# Each feature must specify an `identifier`, which must be the name of the script
 # that provides the feature
-# e.g. the first entry will be called using `python get-charges.py [ARGS]`
 [[charges]]
-identifier = "get-charges"
-method-name = "Löwdiken analysis"
-
-[[commands]]
-identifier = "transmute"
-path.menu = "Build"  # The menu within which the command's menu entry should appear
-path.entry = { label = "Transmute into gold", priority = 300 }  # The text for the command's menu entry and its position within "Build"
-
-[[commands]]
-identifier = "movex"
-path.menu = "Extensions"
-path.submenu = { menu = "Demo", priority = 500 }  # Priority determines the position of "Demo" within "Extensions"
-path.entry = { label = "Move X", priority = 220 }  # Priority determines the position of "Move X" within "Demo"
-
-[[commands]]
-identifier = "movey"
-path.menu = "Extensions"
-path.submenu = { menu = "Demo", priority = 500 }
-path.entry = { label = "Move Y", priority = 210 }
-
-[[commands]]
-identifier = "move"
-path.menu = "Extensions"
-path.submenu = { menu = "Demo", priority = 500 }
-path.entry = { label = "Move", priority = 200 }
-
-[[commands]]
-identifier = "hello"
-path.menu = "Extensions"
-path.submenu = { menu = "Demo", priority = 500 }
-path.entry = { label = "Say Hello", priority = 100 }
+identifier = "gfn2_charges"  # Unlike the plugin name, feature identifiers may contain underscores
+method-name = "GFN2-xTB"
+description = "Calculate atomic partial charges using a local installation of xtb"
+input-format = "sdf"
+support.charges = true
+support.potential = false
+support.elements = "1-86"  # up to Radon
 
 [[energy]]
-identifier = "aura"
-method-name = "Molecular aura"
+identifier = "mmff94"
+method-name = "MMFF94"
+description = "Calculate MMFF94 energies and gradients"
+input-format = "cml"
+support.gradients = true
+support.elements = "1, 6-9, 14-17, 35, 53"
+support.unit-cell = false
+support.ions = false
+support.radicals = false
 
 [[formats]]
-identifier = "lor"
-format-name = "Lorentzian output format"
+identifier = "zyx"
+format-name = "ZYX format"
+file-extensions = [ "zyx" ]
+mime-types = [ "chemical/x-zyx" ]
+description = "Mostly useless file format, xyz-style files with reversed coordinates"
+support.read = true
+support.write = true
+output-format = "xyz"
+input-format = "xyz"
 
 [[generators]]
 identifier = "qavocado"
 program-name = "Quantum Avocado"
+input-format = "cjson"
+highlight-styles = "qavocado_syntax.json"  # An optional path to a file specifying syntax highlighting rules
+
+# This syntax indicates a `user-options` subtable of the most recent `generators` table
+[generators.user-options]
+# Input generators should link to the available presets for common fields
+title = { preset = "Title", default = "" }
+calc_type = { preset = "Calculation Type", default = 1, values = [ "Single Point", "Equilibrium Geometry", "Frequencies" ] }
+theory = { preset = "Theory", default = 2, values = [ "HF", "MP2", "B3LYP", "B3LYP5", "EDF1", "M062X", "CCSD" ] }
+filename_base = { preset = "Filename Base", default = "job" }
+charge = { preset = "Charge", default = 0, minimum = -9, maximum = 9 }
+multiplicity = { preset = "Multiplicity", default = 1, minimum = 1, maximum = 6 }
+# Fields that aren't presets require a type
+comment = { type = "string", label = "Additional comments:", default = "" }
+
+# If a key/value pair in user-options is particularly long, rather than writing
+# it in-line it can be a good idea to put it into a proper table e.g.
+[generators.user-options.basis]
+preset = "Basis"
+default = 2
+values = [
+    "STO-3G",
+    "3-21G",
+    "6-31G(d)",
+    "6-31G(d,p)",
+    "6-31+G(d)",
+    "6-311G(d)",
+    "cc-pVDZ",
+    "cc-pVTZ",
+    "LANL2DZ",
+    "LACVP",
+]
+
+[[commands]]
+identifier = "transmute"
+input-format = "cjson"
+path.menu = "Build"  # The menu within which the command's menu entry should appear
+path.entry = { label = "Transmute into gold", priority = 300 }  # The text for the command's menu entry and its position within "Build"
+
+# Entries with higher priority will come higher in the parent menu, so the three
+# following commands will appear in an Extensions > Demo submenu in the same
+# order they are listed here
+[[commands]]
+identifier = "moveatom"
+input-format = "cjson"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }  # Priority determines the position of "Demo" within "Extensions"
+path.entry = { label = "Move Atom…", priority = 210 }  # Priority determines the position of "Move Atom…" within "Demo"
+
+[commands.user-options]
+selection = { type = "integer", label = "Move atom (index):", default = 0, minimum = 0 }
+
+[[commands]]
+identifier = "moveall"
+input-format = "cjson"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }
+path.entry = { label = "Move All", priority = 200 }
+
+[[commands]]
+identifier = "hello"
+input-format = "cjson"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }
+path.entry = { label = "Say Hello", priority = 100 }

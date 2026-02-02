@@ -1,14 +1,16 @@
 # SPDX-License-Identifier: BSD 3-Clause
-"""A command that turns all metal (in the astronomer's sense) into gold."""
+"""A command that moves all atoms 1 angstrom in the x direction."""
 
 import argparse
 import json
 
 
-def do_alchemy(cjson: dict):
-    for i, z in enumerate(cjson["atoms"]["elements"]["number"]):
-        if z > 2:
-            cjson["atoms"]["elements"]["number"][i] = 79
+def move_atoms(cjson: dict):
+    # The coordinates are a simple list i.e. [x0, y0, z0, x1, y1, z1, x2, …]
+    # so the x-coordinates of atoms n are at index 3n
+    n_atoms = len(cjson["atoms"]["elements"]["number"])
+    for n in range(n_atoms):
+        cjson["atoms"]["coords"]["3d"][n * 3] += 1
 
 
 if __name__ == "__main__":
@@ -22,9 +24,9 @@ if __name__ == "__main__":
     cjson = avo_input["cjson"]
     requested_atom = avo_input["options"]["selection"]
 
-    # Make the changes
-    do_alchemy(cjson)
-    # Be careful, because the elements have now been changed in the
+    # Make the change
+    move_atoms(cjson)
+    # Be careful, because the atoms' positions have now been changed in the
     # original data (`avo_input`) too!
     # Often, you will want to avoid this by using `deepcopy()`
 

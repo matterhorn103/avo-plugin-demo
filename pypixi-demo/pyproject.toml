@@ -17,7 +17,7 @@ dependencies = [
 # The key is the command, which must be the plugin's name, prefixed with `avogadro-`
 # The entry point itself can be any function you like from within your package
 [project.scripts]
-avogadro-pypkg-demo = "pypkg_demo:main"
+avogadro-pypixi-demo = "pypixi_demo:main"
 
 # Some build system is always required for a package, but you are welcome to
 # choose whichever you like, it doesn't have to be uv_build
@@ -42,53 +42,113 @@ pypixi_demo = { path = ".", editable = true }
 
 # The [tool.avogadro] table tells Avogadro what your plugin needs and what it can do
 [tool.avogadro]
-plugin-config = true  # Whether Avogadro should store configuration of your plugin
+plugin-type = "pypixi"
 
-# List the features your plugin provides as entries under the appropriate feature type
-# Each entry must specify an `identifier`, which is the subcommand used
-# by Avogadro when running your plugin
-# e.g. the first entry will be called using `avogadro-pypixi-demo get-charges [ARGS]`
+# Configuration options that Avogadro should store on behalf of your plugin
+[tool.avogadro.user-config]
+hello_repeats = { type = "integer", default = 1, minimum = 1, maximum = 5 }  # See `hello.py` for how this is used
+
+# Features provided by the plugin are listed in arrays of tables, by feature type
+# See https://toml.io/en/v1.0.0#array-of-tables
+
+# Each feature must specify an `identifier`, which must be the name of the script
+# that provides the feature
 [[tool.avogadro.charges]]
-identifier = "get-charges"
-method-name = "Löwdiken analysis"
-
-[[tool.avogadro.commands]]
-identifier = "transmute"
-path.menu = "Build"  # The menu within which the command's menu entry should appear
-path.entry = { label = "Transmute into gold", priority = 300 }  # The text for the command's menu entry and its position within "Build"
-
-[[tool.avogadro.commands]]
-identifier = "movex"
-path.menu = "Extensions"
-path.submenu = { menu = "Demo", priority = 500 }  # Priority determines the position of "Demo" within "Extensions"
-path.entry = { label = "Move X", priority = 220 }  # Priority determines the position of "Move X" within "Demo"
-
-[[tool.avogadro.commands]]
-identifier = "movey"
-path.menu = "Extensions"
-path.submenu = { menu = "Demo", priority = 500 }
-path.entry = { label = "Move Y", priority = 210 }
-
-[[tool.avogadro.commands]]
-identifier = "move"
-path.menu = "Extensions"
-path.submenu = { menu = "Demo", priority = 500 }
-path.entry = { label = "Move", priority = 200 }
-
-[[tool.avogadro.commands]]
-identifier = "hello"
-path.menu = "Extensions"
-path.submenu = { menu = "Demo", priority = 500 }
-path.entry = { label = "Say Hello", priority = 100 }
+identifier = "gfn2_charges"  # Unlike the plugin name, feature identifiers may contain underscores
+method-name = "GFN2-xTB"
+description = "Calculate atomic partial charges using a local installation of xtb"
+input-format = "sdf"
+support.charges = true
+support.potential = false
+support.elements = "1-86"  # up to Radon
 
 [[tool.avogadro.energy]]
-identifier = "aura"
-method-name = "Molecular aura"
+identifier = "mmff94"
+method-name = "MMFF94"
+description = "Calculate MMFF94 energies and gradients"
+input-format = "cml"
+support.gradients = true
+support.elements = "1, 6-9, 14-17, 35, 53"
+support.unit-cell = false
+support.ions = false
+support.radicals = false
 
 [[tool.avogadro.formats]]
-identifier = "lor"
-format-name = "Lorentzian output format"
+identifier = "zyx"
+format-name = "ZYX format"
+file-extensions = [ "zyx" ]
+mime-types = [ "chemical/x-zyx" ]
+description = "Mostly useless file format, xyz-style files with reversed coordinates"
+support.read = true
+support.write = true
+output-format = "xyz"
+input-format = "xyz"
 
 [[tool.avogadro.generators]]
 identifier = "qavocado"
 program-name = "Quantum Avocado"
+input-format = "cjson"
+highlight-styles = "qavocado_syntax.json"  # An optional path to a file specifying syntax highlighting rules
+
+# This syntax indicates a `user-options` subtable of the most recent `generators` table
+[tool.avogadro.generators.user-options]
+# Input generators should link to the available presets for common fields
+title = { preset = "Title", default = "" }
+calc_type = { preset = "Calculation Type", default = 1, values = [ "Single Point", "Equilibrium Geometry", "Frequencies" ] }
+theory = { preset = "Theory", default = 2, values = [ "HF", "MP2", "B3LYP", "B3LYP5", "EDF1", "M062X", "CCSD" ] }
+filename_base = { preset = "Filename Base", default = "job" }
+charge = { preset = "Charge", default = 0, minimum = -9, maximum = 9 }
+multiplicity = { preset = "Multiplicity", default = 1, minimum = 1, maximum = 6 }
+# Fields that aren't presets require a type
+comment = { type = "string", label = "Additional comments:", default = "" }
+
+# If a key/value pair in user-options is particularly long, rather than writing
+# it in-line it can be a good idea to put it into a proper table e.g.
+[tool.avogadro.generators.user-options.basis]
+preset = "Basis"
+default = 2
+values = [
+    "STO-3G",
+    "3-21G",
+    "6-31G(d)",
+    "6-31G(d,p)",
+    "6-31+G(d)",
+    "6-311G(d)",
+    "cc-pVDZ",
+    "cc-pVTZ",
+    "LANL2DZ",
+    "LACVP",
+]
+
+[[tool.avogadro.commands]]
+identifier = "transmute"
+input-format = "cjson"
+path.menu = "Build"  # The menu within which the command's menu entry should appear
+path.entry = { label = "Transmute into gold", priority = 300 }  # The text for the command's menu entry and its position within "Build"
+
+# Entries with higher priority will come higher in the parent menu, so the three
+# following commands will appear in an Extensions > Demo submenu in the same
+# order they are listed here
+[[tool.avogadro.commands]]
+identifier = "moveatom"
+input-format = "cjson"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }  # Priority determines the position of "Demo" within "Extensions"
+path.entry = { label = "Move Atom…", priority = 210 }  # Priority determines the position of "Move Atom…" within "Demo"
+
+[tool.avogadro.commands.user-options]
+selection = { type = "integer", label = "Move atom (index):", default = 0, minimum = 0 }
+
+[[tool.avogadro.commands]]
+identifier = "moveall"
+input-format = "cjson"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }
+path.entry = { label = "Move All", priority = 200 }
+
+[[tool.avogadro.commands]]
+identifier = "hello"
+input-format = "cjson"
+path.menu = "Extensions"
+path.submenu = { menu = "Demo", priority = 500 }
+path.entry = { label = "Say Hello", priority = 100 }
