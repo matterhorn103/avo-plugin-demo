@@ -24,25 +24,12 @@ hello_repeats = { type = "integer", default = 1, minimum = 1, maximum = 5 }  # S
 
 # Each feature must specify an `identifier`, which must be the name of the script
 # that provides the feature
-[[charges]]
-identifier = "gfn2_charges"  # Unlike the plugin name, feature identifiers may contain underscores
-method-name = "GFN2-xTB"
-description = "Calculate atomic partial charges using a local installation of xtb"
-input-format = "sdf"
-support.charges = true
-support.potential = false
-support.elements = "1-86"  # up to Radon
 
-[[energy]]
-identifier = "mmff94"
-method-name = "MMFF94"
-description = "Calculate MMFF94 energies and gradients"
-input-format = "cml"
-support.gradients = true
-support.elements = "1, 6-9, 14-17, 35, 53"
-support.unit-cell = false
-support.ions = false
-support.radicals = false
+#[[charges]]
+# See the pypkg/pypixi demos for an example of a `charges` feature
+
+#[[energy]]
+# See the pypkg/pypixi demos for an example of an `energy` feature
 
 [[formats]]
 identifier = "zyx"
