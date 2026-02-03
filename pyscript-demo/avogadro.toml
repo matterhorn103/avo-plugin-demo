@@ -61,12 +61,10 @@ path.entry = { label = "Transmute into gold", priority = 300 }  # The text for t
 [[commands]]
 identifier = "moveatom"
 input-format = "cjson"
+user-options = "customization/moveatom_options.json"
 path.menu = "Extensions"
 path.submenu = { menu = "Demo", priority = 500 }  # Priority determines the position of "Demo" within "Extensions"
 path.entry = { label = "Move Atom…", priority = 210 }  # Priority determines the position of "Move Atom…" within "Demo"
-
-[commands.user-options]
-selection = { type = "integer", label = "Move atom (index):", default = 0, minimum = 0 }
 
 [[commands]]
 identifier = "moveall"

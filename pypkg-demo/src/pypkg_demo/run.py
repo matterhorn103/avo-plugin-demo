@@ -7,7 +7,7 @@ def run(args):
     match args.feature:
         case "gfn2_charges":
             # A large plugin can run faster if we only import the necessary feature
-            from .gfn2_charges import charges, potential
+            from .gfn2 import charges, potential
             if args.charges:
                 charges()
             else:

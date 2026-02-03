@@ -37,7 +37,7 @@ def main():
     parser_charges.add_argument("--potential", action="store_true")
 
     parser_energy = subparsers.add_parser("mmff94")
-    parser_energy.add_argument("-f", "--file")
+    parser_energy.add_argument("--file")
 
     parser_format = subparsers.add_parser("zyx")
     parser_format.add_argument("--read", action="store")
@@ -45,6 +45,9 @@ def main():
 
     parser_generator = subparsers.add_parser("qavocado")
     parser_generator.add_argument("input")
+    # If we had specified in `pyproject.toml` that the user options should be
+    # obtained dynamically, we would have to also handle the flag for it
+    #parser_generator.add_argument("--print-options")
 
     parser_transmute = subparsers.add_parser("transmute")
     parser_transmute.add_argument("input")

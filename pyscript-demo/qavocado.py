@@ -97,6 +97,9 @@ if __name__ == "__main__":
     parser.add_argument("input")
     parser.add_argument("--lang", nargs="?", default="en")
     parser.add_argument("--debug", action="store_true")
+    # If we had specified in `avogadro.toml` that the user options should be
+    # obtained dynamically, we would have to also handle the flag for it
+    #parser.add_argument("--print-options")
     args = parser.parse_args()
 
     try:
