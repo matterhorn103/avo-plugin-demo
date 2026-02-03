@@ -1,0 +1,53 @@
+{
+  "user-options": {
+    "title": {
+      "preset": "Title",
+      "default": ""
+    },
+    "calc_type": {
+      "preset": "Calculation Type",
+      "default": 1,
+      "values": ["Single Point", "Equilibrium Geometry", "Frequencies"]
+    },
+    "theory": {
+      "preset": "Theory",
+      "default": 2,
+      "values": ["HF", "MP2", "B3LYP", "B3LYP5", "EDF1", "M062X", "CCSD"]
+    },
+    "basis": {
+      "preset": "Basis",
+      "default": 2,
+      "values": [
+        "STO-3G",
+        "3-21G",
+        "6-31G(d)",
+        "6-31G(d,p)",
+        "6-31+G(d)",
+        "6-311G(d)",
+        "cc-pVDZ",
+        "cc-pVTZ",
+        "LANL2DZ",
+        "LACVP"
+      ]
+    },
+    "filename_base": {
+      "preset": "Filename Base",
+      "default": "job"
+    },
+    "charge": {
+      "preset": "Charge",
+      "minimum": -9,
+      "maximum": 9
+    },
+    "multiplicity": {
+      "preset": "Multiplicity",
+      "minimum": 1,
+      "maximum": 6
+    },
+    "comment": {
+      "type": "string",
+      "label": "Additional comments:",
+      "default": ""
+    }
+  }
+}

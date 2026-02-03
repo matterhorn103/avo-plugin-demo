@@ -1,0 +1,19 @@
+{
+  "highlightStyles": [
+    {
+      "style": "default",
+      "rules": [
+        {
+          "patterns": [
+            {
+              "regexp": "\\$[a-z]+\\s"
+            }
+          ],
+          "format": {
+            "preset": "keyword"
+          }
+        }
+      ]
+    }
+  ]
+}
