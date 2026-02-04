@@ -71,7 +71,7 @@ def main():
     # Some may prefer to do more right here, some may prefer to only do argument
     # parsing at the entry point
 
-    # Here, we've decided to keep the file dedicated to defining the entry point
-    # and parsing the args by delegating the interpretation of the arguments to
+    # Here, we've kept this file dedicated to defining the entry point and
+    # parsing the args, with the interpretation of the arguments delegated to
     # another function in another module
     run(args)

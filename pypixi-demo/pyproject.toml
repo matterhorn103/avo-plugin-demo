@@ -10,6 +10,7 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.10"  # If you choose to specify this, please follow the Avogadro Python version policy!
 dependencies = [
+    "numpy>=2.2.6",
     "platformdirs>=4.2.0",
 ]  # Dependencies that should be sourced from PyPI, the Python Package Index
 
@@ -59,6 +60,7 @@ identifier = "gfn2_charges"  # Unlike the plugin name, feature identifiers may c
 method-name = "GFN2-xTB"
 description = "Calculate atomic partial charges using a local installation of xtb"
 input-format = "sdf"
+input-cjson = true  # Avogadro will always pass the CJSON as well as `input-format`
 support.charges = true
 support.potential = false
 support.elements = "1-86"  # up to Radon
