@@ -13,6 +13,7 @@ readme = "README.md"
 
 # Second, tell Avogadro what your plugin needs and what it can do
 
+minimum-avogadro-version = "1.103"
 plugin-type = "pyscript"
 
 # Configuration options that Avogadro should store on behalf of your plugin

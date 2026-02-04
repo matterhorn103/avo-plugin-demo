@@ -42,6 +42,7 @@ pypixi_demo = { path = ".", editable = true }
 
 # The [tool.avogadro] table tells Avogadro what your plugin needs and what it can do
 [tool.avogadro]
+minimum-avogadro-version = "1.103"
 plugin-type = "pypixi"
 
 # Configuration options that Avogadro should store on behalf of your plugin
