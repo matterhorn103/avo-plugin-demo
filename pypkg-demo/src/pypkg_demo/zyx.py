@@ -2,9 +2,6 @@
 """Parser for a mostly useless file format consisting of xyz-style files but
 with reversed coordinates."""
 
-import argparse
-import json
-
 
 def write(xyz: str) -> str:
     xyz_lines = xyz.splitlines()
