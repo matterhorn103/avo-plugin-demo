@@ -46,10 +46,6 @@ pypixi_demo = { path = ".", editable = true }
 minimum-avogadro-version = "1.103"
 plugin-type = "pypixi"
 
-# Configuration options that Avogadro should store on behalf of your plugin
-[tool.avogadro.user-config]
-hello_repeats = { type = "integer", default = 1, minimum = 1, maximum = 5 }  # See `hello.py` for how this is used
-
 # Features provided by the plugin are listed in arrays of tables, by feature type
 # See https://toml.io/en/v1.0.0#array-of-tables
 
