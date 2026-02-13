@@ -32,16 +32,18 @@ def main():
     # subparser must match the `identifier` for the feature
     # We then add the arguments specific to each feature to its subparser
 
-    parser_charges = subparsers.add_parser("gfn2_charges")
+    parser_charges = subparsers.add_parser("avogadro_charges")
+    parser_charges.add_argument("input")
     parser_charges.add_argument("--charges", action="store_true")
     parser_charges.add_argument("--potential", action="store_true")
 
-    parser_energy = subparsers.add_parser("mmff94")
-    parser_energy.add_argument("--file")
+    parser_energy = subparsers.add_parser("stellar")
+    parser_energy.add_argument("input")
 
     parser_format = subparsers.add_parser("zyx")
-    parser_format.add_argument("--read", action="store")
-    parser_format.add_argument("--write", action="store")
+    parser_format.add_argument("input")
+    parser_format.add_argument("--read", action="store_true")
+    parser_format.add_argument("--write", action="store_true")
 
     parser_generator = subparsers.add_parser("qavocado")
     parser_generator.add_argument("input")

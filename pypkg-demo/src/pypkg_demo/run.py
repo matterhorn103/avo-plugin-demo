@@ -6,15 +6,15 @@ def run(args):
     avo_input = json.loads(args.input)
     output = None
     match args.feature:
-        case "gfn2_charges":
-            # A large plugin can run faster if we only import the necessary feature
-            from .gfn2 import charges, potential
+        # A large plugin can run faster if we only import the necessary feature
+        case "avogadro_charges":
+            from .avo_num import charges, potential
             if args.charges:
-                output = charges(avo_input["sdf"])
+                output = charges(avo_input["cjson"])
             else:
                 output = potential()
-        case "mmff94":
-            from .mmff94 import run
+        case "stellar":
+            from .stellar import run
             run(avo_input["cjson"])
         case "zyx":
             from .zyx import read, write
