@@ -1,7 +1,7 @@
 [project]
 # These fields are required:
 name = "pypkg-demo"
-version = "0.1.0"
+version = "6.0.2"
 description = "An example Python package plugin for Avogadro 2 to demonstrate the revamped plugin API in v2.0 onwards"
 authors = [
     { name = "Amedeo Avogadro", email = "avogadro@unito.it" }
@@ -39,17 +39,17 @@ plugin-type = "pypixi"
 
 # Each feature must specify an `identifier`, which must be the name of the script
 # that provides the feature
-[[tool.avogadro.charges]]
+[[tool.avogadro.electrostatic-models]]
 identifier = "gfn2_charges"  # Unlike the plugin name, feature identifiers may contain underscores
 method-name = "GFN2-xTB"
 description = "Calculate atomic partial charges using a local installation of xtb"
 input-format = "sdf"
 input-cjson = true  # Avogadro will always pass the CJSON as well as `input-format`
 support.charges = true
-support.potential = false
+support.potentials = false
 support.elements = "1-86"  # up to Radon
 
-[[tool.avogadro.energy]]
+[[tool.avogadro.energy-models]]
 identifier = "mmff94"
 method-name = "MMFF94"
 description = "Calculate MMFF94 energies and gradients"
@@ -60,7 +60,7 @@ support.unit-cell = false
 support.ions = false
 support.radicals = false
 
-[[tool.avogadro.formats]]
+[[tool.avogadro.file-formats]]
 identifier = "zyx"
 format-name = "ZYX format"
 file-extensions = [ "zyx" ]
@@ -71,14 +71,14 @@ support.write = true
 output-format = "xyz"
 input-format = "xyz"
 
-[[tool.avogadro.generators]]
+[[tool.avogadro.input-generators]]
 identifier = "qavocado"
 program-name = "Quantum Avocado"
 input-format = "cjson"
 user-options = "src/customization/qavocado_options.json"  # An optional path to a file specifying the options in the dialog
 highlight-styles = "src/customization/qavocado_syntax.json"  # An optional path to a file specifying syntax highlighting rules
 
-[[tool.avogadro.commands]]
+[[tool.avogadro.menu-commands]]
 identifier = "transmute"
 input-format = "cjson"
 path.menu = "Build"  # The menu within which the command's menu entry should appear
@@ -87,7 +87,7 @@ path.entry = { label = "Transmute into gold", priority = 300 }  # The text for t
 # Entries with higher priority will come higher in the parent menu, so the three
 # following commands will appear in an Extensions > Demo submenu in the same
 # order they are listed here
-[[tool.avogadro.commands]]
+[[tool.avogadro.menu-commands]]
 identifier = "moveatom"
 input-format = "cjson"
 user-options = "src/customization/moveatom_options.json"
@@ -95,14 +95,14 @@ path.menu = "Extensions"
 path.submenu = { menu = "Demo", priority = 500 }  # Priority determines the position of "Demo" within "Extensions"
 path.entry = { label = "Move Atom…", priority = 210 }  # Priority determines the position of "Move Atom…" within "Demo"
 
-[[tool.avogadro.commands]]
+[[tool.avogadro.menu-commands]]
 identifier = "moveall"
 input-format = "cjson"
 path.menu = "Extensions"
 path.submenu = { menu = "Demo", priority = 500 }
 path.entry = { label = "Move All", priority = 200 }
 
-[[tool.avogadro.commands]]
+[[tool.avogadro.menu-commands]]
 identifier = "hello"
 input-format = "cjson"
 path.menu = "Extensions"

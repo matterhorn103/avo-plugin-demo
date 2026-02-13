@@ -2,7 +2,7 @@
 
 # These fields are required:
 name = "pyscript-demo"
-version = "0.1.0"
+version = "6.0.2"
 description = "An example Python script plugin for Avogadro 2 to demonstrate the revamped plugin API in v2.0 onwards"
 authors = [
     { name = "Amedeo Avogadro", email = "avogadro@unito.it" }
@@ -22,13 +22,13 @@ plugin-type = "pyscript"
 # Each feature must specify an `identifier`, which must be the name of the script
 # that provides the feature
 
-#[[charges]]
-# See the pypkg/pypixi demos for an example of a `charges` feature
+#[[electrostatic-models]]
+# See the pypkg/pypixi demos for an example of an `electrostatic-models` feature
 
-#[[energy]]
-# See the pypkg/pypixi demos for an example of an `energy` feature
+#[[energy-models]]
+# See the pypkg/pypixi demos for an example of an `energy-models` feature
 
-[[formats]]
+[[file-formats]]
 identifier = "zyx"
 format-name = "ZYX format"
 file-extensions = [ "zyx" ]
@@ -39,14 +39,14 @@ support.write = true
 output-format = "xyz"
 input-format = "xyz"
 
-[[generators]]
+[[input-generators]]
 identifier = "qavocado"
 program-name = "Quantum Avocado"
 input-format = "cjson"
 user-options = "customization/qavocado_options.json"  # An optional path to a file specifying the options in the dialog
 highlight-styles = "customization/qavocado_syntax.json"  # An optional path to a file specifying syntax highlighting rules
 
-[[commands]]
+[[menu-commands]]
 identifier = "transmute"
 input-format = "cjson"
 path.menu = "Build"  # The menu within which the command's menu entry should appear
@@ -55,7 +55,7 @@ path.entry = { label = "Transmute into gold", priority = 300 }  # The text for t
 # Entries with higher priority will come higher in the parent menu, so the three
 # following commands will appear in an Extensions > Demo submenu in the same
 # order they are listed here
-[[commands]]
+[[menu-commands]]
 identifier = "moveatom"
 input-format = "cjson"
 user-options = "customization/moveatom_options.json"
@@ -63,14 +63,14 @@ path.menu = "Extensions"
 path.submenu = { menu = "Demo", priority = 500 }  # Priority determines the position of "Demo" within "Extensions"
 path.entry = { label = "Move Atom…", priority = 210 }  # Priority determines the position of "Move Atom…" within "Demo"
 
-[[commands]]
+[[menu-commands]]
 identifier = "moveall"
 input-format = "cjson"
 path.menu = "Extensions"
 path.submenu = { menu = "Demo", priority = 500 }
 path.entry = { label = "Move All", priority = 200 }
 
-[[commands]]
+[[menu-commands]]
 identifier = "hello"
 input-format = "cjson"
 path.menu = "Extensions"

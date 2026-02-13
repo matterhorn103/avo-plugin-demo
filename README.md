@@ -55,7 +55,7 @@ Information about and examples of (Python) plugins for Avogadro 2 to demonstrate
     - `plugin.json` is deprecated
 - The static metadata for a plugin contains the following information:
     - The type of plugin
-    - The features provided by the plugin, the types of each plugin feature (`charges`, `energy` etc.), and various information about each feature e.g. what the display names and/or menu paths for each of those items should be
+    - The features provided by the plugin, the types of each plugin feature (`file-formats`, `menu-commands` etc.), and various information about each feature e.g. what the display names and/or menu paths for each of those items should be
     - Info about the plugin's provenance that was previously in `plugin.json` e.g. author, version number
     - Whether or not the plugin wants a configuration to be recorded for it in the main Avogadro configuration file, and if so, what entries the config should have for the plugin
 - The metadata file may be in the form of:
@@ -67,6 +67,18 @@ Information about and examples of (Python) plugins for Avogadro 2 to demonstrate
 - For Python plugins, it is recommended to use `pyproject.toml` as the metadata file.
     - If preferable, Python plugins may also use `avogadro.toml`. If both `avogadro.toml` and `pyproject.toml` are found in the plugin's directory, `avogadro.toml` will take precedence and `pyproject.toml` will be ignored.
 - For non-Python plugins, `avogadro.toml` must be used.
+
+### Feature types
+
+- Plugins can provide any number of the following features:
+
+| Feature type         | TOML key               | Purpose                       |
+| -------------------- | ---------------------- | --------------------------------- |
+| Electrostatic Models | `electrostatic-models` | Provide models for Avogadro to use in the calculation of partial charges and/or electrostatic potentials |
+| Energy Models        | `energy-models`        | Provide models for Avogadro to use in the calculation of energies and gradients |
+| File Formats         | `file-formats`         | Parse chemical file formats that Avogadro doesn't know |
+| Input Generators     | `input-generators`     | Prepare input files for computational chemistry programs |
+| Menu Commands        | `menu-commands`        | Add additional items for the menus that carry out various tasks |
 
 ### The online plugin repository/index
 
@@ -110,10 +122,10 @@ avogadro-demo = "demo:main"
     - `--lang` – though actually changing behaviour based on the accompanying localization string is not obligatory
     - `--debug` – again, a change in behaviour is not obligatory, though plugins are encouraged to provide more detailed logs and error messages if this flag is passed
     - `--print-options` – *only* if the plugin indicates that the interface of a feature's dialog is to be specified *dynamically* using `user-options = "dynamic"`, it must respond appropriately to the flag, otherwise it does not need to as it will never be passed
-    - `charges` features must respond appropriately (according to what they support) to:
+    - `electrostatic-models` features must respond appropriately (according to what they support) to:
         - `--charges`
         - `--potential`
-    - `formats` features must respond appropriately (according to what they support) to:
+    - `file-formats` features must respond appropriately (according to what they support) to:
         - `--read`
         - `--write`
 - All other option flags used in the plugin API until now are deprecated
@@ -126,32 +138,32 @@ avogadro-demo = "demo:main"
 
 #### The input JSON
 
-| Key                               | JSON data type        | Value                                                     | Feature types         | Applicable    |
-| ---                               | ---                   | ---                                                       | ---                   | ---           |
-| `config`                          | `object`              | The user's stored configuration of the plugin             | All                   | `user-config` is specified |
-| `cjson`                           | `object`              | The current CJSON file in full                            | All except `formats`  | `input-cjson = true` or `input-format = "cjson"` |
-| `xyz`, `cml`, `pdb`, `cif`, `sdf`, `mdl`, `mol`, etc. | `string` | The contents of a file in the respective format    | All except `formats`  | `input-format = <fmt>` |
-| `file`                            | `string`              | A path to a file in the filesystem                        | `formats`             | Always        |
-| `options`                         | `object`              | Key/value pairs for each option requested in `user-options` | `commands`, `generators` | Always   |
-| `points`                          | `array` of `number`   | The coordinates of the requested points                   | `charges`             | Called with `--potentials` |
-| `selectedAtoms`                   | `array` of `number`   | The indices of the atoms that are currently selected      | `commands`            | Always        |
+| Key                               | JSON data type        | Value                                                     | Feature types                         | Applicable    |
+| ---                               | ---                   | ---                                                       | ---                                   | ---           |
+| `config`                          | `object`              | The user's stored configuration of the plugin             | All                                   | `user-config` is specified |
+| `cjson`                           | `object`              | The current CJSON file in full                            | All except `file-formats`             | `input-cjson = true` or `input-format = "cjson"` |
+| `xyz`, `cml`, `pdb`, `cif`, `sdf`, `mdl`, `mol`, etc. | `string` | The contents of a file in the respective format    | All except `file-formats`             | `input-format = <fmt>` |
+| `file`                            | `string`              | A path to a file in the filesystem                        | `file-formats`                        | Always        |
+| `options`                         | `object`              | Key/value pairs for each option requested in `user-options` | `menu-commands`, `input-generators` | Always        |
+| `points`                          | `array` of `number`   | The coordinates of the requested points                   | `electrostatic-models`                | Called with `--potentials` |
+| `selectedAtoms`                   | `array` of `number`   | The indices of the atoms that are currently selected      | `menu-commands`                       | Always        |
 
 #### The output JSON
 
-| Key                               | JSON data type        | Value                                                     | Feature types         | Applicable    |
-| ---                               | ---                   | ---                                                       | ---                   | ---           |
-| `message`                         | `string`              | A message to display to the user in a pop-up dialog       | All                   | Always        |
-| `error`                           | `string`              | Similar, but displays an error, and the plugin is stopped | All                   | Always        |
-| `config`                          | `object`              | The user's configuration of the plugin as it should be saved | All                | `user-config` is specified |
-| `cjson`                           | `object`              | A CJSON file to be loaded                                 | All?                  | `output-format = "cjson"` |
-| `xyz`, `cml`, `pdb`, `cif`, `sdf`, `mdl`, `mol`, etc. | `string` | The contents of a file in the respective format    | All?                  | `output-format = <fmt>` |
-| `charges`                         | `array` of `number`   | The partial charges on each atom                          | `charges`             | Called with `--charges` |
-| `potentials`                      | `array` of `number`   | The electrostatic potential at each requested point       | `charges`             | Called with `--potentials` |
-| `bond`                            | `bool`                | Whether Avogadro should run automatic bond perception     | `commands`            | Always        |
-| `selectedAtoms`                   | `array` of `number`   | The indices of the atoms that Avogadro should select      | `commands`            | Always        |
-| `warnings`                        | `array` of `string`   | Non-fatal warnings to be shown in the generator's dialog  | `generators`          | Always        |
-| `generatedFiles`                  | `object`              | Details of several files                                  | `generators`          | Always        |
-| `mainFile`                        | `string`              | The primary input file for a calculation                  | `generators`          | Always        |
+| Key                               | JSON data type        | Value                                                     | Feature types             | Applicable    |
+| ---                               | ---                   | ---                                                       | ---                       | ---           |
+| `message`                         | `string`              | A message to display to the user in a pop-up dialog       | All                       | Always        |
+| `error`                           | `string`              | Similar, but displays an error, and the plugin is stopped | All                       | Always        |
+| `config`                          | `object`              | The user's configuration of the plugin as it should be saved | All                    | `user-config` is specified |
+| `cjson`                           | `object`              | A CJSON file to be loaded                                 | All?                      | `output-format = "cjson"` |
+| `xyz`, `cml`, `pdb`, `cif`, `sdf`, `mdl`, `mol`, etc. | `string` | The contents of a file in the respective format    | All?                      | `output-format = <fmt>` |
+| `charges`                         | `array` of `number`   | The partial charges on each atom                          | `electrostatic-models`    | Called with `--charges` |
+| `potentials`                      | `array` of `number`   | The electrostatic potential at each requested point       | `electrostatic-models`    | Called with `--potentials` |
+| `bond`                            | `bool`                | Whether Avogadro should run automatic bond perception     | `menu-commands`           | Always        |
+| `selectedAtoms`                   | `array` of `number`   | The indices of the atoms that Avogadro should select      | `menu-commands`           | Always        |
+| `warnings`                        | `array` of `string`   | Non-fatal warnings to be shown in the generator's dialog  | `input-generators`        | Always        |
+| `generatedFiles`                  | `object`              | Details of several files                                  | `input-generators`        | Always        |
+| `mainFile`                        | `string`              | The primary input file for a calculation                  | `input-generators`        | Always        |
 
 ### Runtime plugin loading
 
