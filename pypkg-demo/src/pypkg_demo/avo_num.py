@@ -1,86 +1,47 @@
 # SPDX-License-Identifier: BSD 3-Clause
-"""Calculate atomic partial charges using a local installation of xtb."""
-
-import os
-from shutil import which
-import tempfile
-import subprocess
-from pathlib import Path
+"""Assign atomic partial charges according to the digits of Avogadro's number."""
 
 
-def charges(mol: str) -> str:
-    # Avogadro will send us the mol file as a string
-    # we need to write it to a temporary file
-    fd, name = tempfile.mkstemp(".sdf")
-    with open(name, "w", encoding="utf-8") as f:
-        f.write(mol)
+def charges(cjson: dict) -> dict:
+    # Since we are assigning the charges arbitrarily we only need to know the
+    # number of atoms for our example, the rest of the input is irrelvant
 
-    # get the total charge and spin from the input
-    # i.e., read the line after <AVOGADRO_TOTAL_CHARGE>
-    # and the line after <AVOGADRO_TOTAL_SPIN>
-    charge = 0
-    spin = 1
-    read_charge = False
-    read_spin = False
-    # iterate through the lines in mol
-    for line in mol.splitlines():
-        if "<AVOGADRO_TOTAL_CHARGE>" in line:
-            read_charge = True
-            continue
-        if "<AVOGADRO_TOTAL_SPIN>" in line:
-            read_spin = True
-            continue
-        if read_charge:
-            charge = int(line.strip())
-            read_charge = False
-            continue
-        if read_spin:
-            spin = int(line.strip())
-            read_spin = False
-            continue
+    n_atoms = len(cjson["atoms"]["elements"]["number"])
 
-    # run xtb
-    xtb = which("xtb")
-    if xtb is None:
-        # Can't work if xtb is missing!
-        raise Exception("Local installation of xtb not found!")
+    digits = [6, 0, 2, 2, 1, 4, 0, 7, 6]
 
-    # for now, ignore the output itself
-    tempdir = tempfile.mkdtemp()
-    arguments = [xtb, name, "--gfn2", "--chrg", str(charge)]
-    if spin != 1:
-        arguments.append("--uhf")
-        arguments.append(str(spin - 1))
-    output = subprocess.run(
-        arguments, stdout=subprocess.PIPE, cwd=tempdir, check=True
-    )
-    # instead we read the "charges" file
-    result = ""
-    with open(Path(tempdir)/"charges", "r", encoding="utf-8") as f:
-        result = f.read()
-
-    # try to cleanup the temporary files
-    os.remove(name)
-    for filename in os.listdir(tempdir):
-        try:
-            os.remove(tempdir + "/" + filename)
-        except Exception:
-            continue
-    # and try to cleanup the directory
-    try:
-        os.rmdir(tempdir)
-    except Exception:
-        pass
+    charges = []
+    for i in range(n_atoms):
+        # Return alternating positive and negative charges so that the net
+        # charge is either 0 or small
+        magnitude = digits[i // 2] / 10
+        if i % 2 == 0:
+            charges.append(magnitude)
+        else:
+            charges.append(-magnitude)
 
     output = {
-        "charges": result
+        "charges": charges
     }
     
     return output
 
 
 def potential():
-    # at the moment, xtb doesn't have a good way to do this
-    # and the method shouldn't be called anyway
+    # The plugin has stated in pyproject.toml that potentials are not supported
+    # so this method should never be necessary anyway
 
-    return ""
+    return {}
+
+
+if __name__ == "__main__":
+    input = {
+        "atoms": {
+            "elements": {
+                "number": [
+                    1, 2, 3, 4, 5, 6,
+                ]
+            }
+        }
+    }
+    print(charges(input))

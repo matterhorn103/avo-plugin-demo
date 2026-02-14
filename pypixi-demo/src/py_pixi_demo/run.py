@@ -55,6 +55,6 @@ def run(args):
                     output = do_move(avo_input, move_all=(args.feature == "moveall"))
                 case "hello":
                     output = hello_world(avo_input)
-    if output:
+    if output is not None:
         # Pass back to Avogadro
         print(json.dumps(output))
