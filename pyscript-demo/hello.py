@@ -17,7 +17,9 @@ if __name__ == "__main__":
     avo_input = json.loads(args.input)
 
     # Extract number of times to shout hello from user's config
-    n_hello = avo_input["config"]["hello_repeats"]
+    # n_hello = avo_input["config"]["hello_repeats"]
+    # Config for plugins isn't implemented yet though! So just once for now
+    n_hello = 1
 
     # Send the user a message that will appear in a pop-up dialog
     message = "Hello World!\n" * n_hello
