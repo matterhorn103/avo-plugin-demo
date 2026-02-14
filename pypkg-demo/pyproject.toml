@@ -32,7 +32,7 @@ build-backend = "uv_build"
 # The [tool.avogadro] table tells Avogadro what your plugin needs and what it can do
 [tool.avogadro]
 minimum-avogadro-version = "1.103"
-plugin-type = "pypixi"
+plugin-type = "pypkg"
 
 # Features provided by the plugin are listed in arrays of tables, by feature type
 # See https://toml.io/en/v1.0.0#array-of-tables
