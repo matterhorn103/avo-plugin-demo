@@ -49,6 +49,11 @@ support.charges = true
 support.potentials = false
 support.elements = "1-86"  # up to Radon
 
+# Localization of a feature is provided by a table with the locale string as the table name
+# Only relevant items need to be localized
+# Any items which could be localized and aren't just fall back to the default
+de.description = "Partialladungen nach den Ziffern der Avogadro-Konstante zuordnen."
+
 [[tool.avogadro.energy-models]]
 identifier = "stellar"
 model-name = "STELLAR"
@@ -94,6 +99,8 @@ user-options = "src/customization/moveatom_options.json"
 path.menu = "Extensions"
 path.submenu = { menu = "Demo", priority = 500 }  # Priority determines the position of "Demo" within "Extensions"
 path.entry = { label = "Move Atom…", priority = 210 }  # Priority determines the position of "Move Atom…" within "Demo"
+de.path.submenu = { menu = "Beispiel", priority = 500 }
+de.path.entry = { label = "Atom verschieben…", priority = 210 }
 
 [[tool.avogadro.menu-commands]]
 identifier = "moveall"
@@ -101,6 +108,8 @@ input-format = "cjson"
 path.menu = "Extensions"
 path.submenu = { menu = "Demo", priority = 500 }
 path.entry = { label = "Move All", priority = 200 }
+de.path.submenu = { menu = "Beispiel", priority = 500 }
+de.path.entry = { label = "Alle verschieben", priority = 200 }
 
 [[tool.avogadro.menu-commands]]
 identifier = "hello"
@@ -108,3 +117,5 @@ input-format = "cjson"
 path.menu = "Extensions"
 path.submenu = { menu = "Demo", priority = 500 }
 path.entry = { label = "Say Hello", priority = 100 }
+de.path.submenu = { menu = "Beispiel", priority = 500 }
+de.path.entry = { label = "Begrüßen :)", priority = 100 }
