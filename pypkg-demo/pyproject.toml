@@ -6,6 +6,7 @@ description = "An example Python package plugin for Avogadro 2 to demonstrate th
 authors = [
     { name = "Amedeo Avogadro", email = "avogadro@unito.it" }
 ]
+license = "BSD-3-Clause"  # An SPDX license identifier, see https://spdx.org/licenses/
 # These fields are optional:
 readme = "README.md"
 requires-python = ">=3.10"  # If you choose to specify this, please follow the Avogadro Python version policy!
