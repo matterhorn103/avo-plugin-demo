@@ -1,8 +1,10 @@
 {
-  "selection": {
-    "type": "integer",
-    "label": "Move atom (index):",
-    "default": 0, 
-    "minimum": 0
+  "userOptions": {
+    "selection": {
+      "type": "integer",
+      "label": "Move atom (index):",
+      "default": 0, 
+      "minimum": 0
+    }
   }
 }
