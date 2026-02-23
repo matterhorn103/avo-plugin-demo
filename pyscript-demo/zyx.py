@@ -4,6 +4,7 @@ with reversed coordinates."""
 
 import argparse
 import json
+import sys
 
 
 def write(xyz: str) -> str:
@@ -45,14 +46,13 @@ def read(zyx: str) -> str:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("input")
     parser.add_argument("--read", action="store_true")
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--lang", nargs="?", default="en")
     args = parser.parse_args()
 
     # Read input from Avogadro
-    avo_input = json.loads(args.input)
+    avo_input = json.load(sys.stdin)
 
     if args.read:
         xyz = read(avo_input["file"])

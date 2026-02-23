@@ -44,38 +44,42 @@ pypixi_demo = { path = ".", editable = true }
 # The [tool.avogadro] table tells Avogadro what your plugin needs and what it can do
 [tool.avogadro]
 minimum-avogadro-version = "1.103"
-plugin-type = "pypixi"
 
 # Features provided by the plugin are listed in arrays of tables, by feature type
 # See https://toml.io/en/v1.0.0#array-of-tables
 
 # Each feature must specify an `identifier`, which must be the name of the script
 # that provides the feature
-[[tool.avogadro.electrostatic-models]]
-identifier = "avogadro_charges"  # Unlike the plugin name, feature identifiers may contain underscores
-model-name = "N_A"
-description = "Assign atomic partial charges according to the digits of Avogadro's number"
-input-format = "sdf"
-input-cjson = true  # If true, Avogadro will always pass the CJSON as well as `input-format`
-support.charges = true
-support.potentials = false
-support.elements = "1-86"  # up to Radon
-
-# Localization of a feature is provided by a table with the locale string as the table name
-# Only relevant items need to be localized
-# Any items which could be localized and aren't just fall back to the default
-de.description = "Partialladungen nach den Ziffern der Avogadro-Konstante zuordnen."
-
 [[tool.avogadro.energy-models]]
 identifier = "stellar"
 model-name = "STELLAR"
-description = "A model that causes molecules to either explode or implode"
-input-format = "cjson"
+input-format = "cjson"  # If true, Avogadro will always pass the CJSON as well as `input-format`
 support.gradients = false
 support.elements = "1-42, 44-60, 62-94"  # Those with stable isotopes
 support.unit-cell = false
 support.ions = true
 support.radicals = true
+description = "A model that causes molecules to either explode or implode"
+
+
+[[tool.avogadro.electrostatic-models]]
+identifier = "avogadro_charges"  # Unlike the plugin name, feature identifiers may contain underscores
+model-name = "N_A"
+input-format = "sdf"
+input-cjson = true
+support.elements = "1-86"  # up to Radon
+support.charges = true
+support.potentials = false
+
+# Localization of a string is provided by replacing the simple string with a
+# table containing localized strings (cf the unlocalized description above)
+# The keys are the locale codes
+# If *any* localized strings are provided, a default string *must* then also be
+# provided under the `default` key, which is used as the fallback
+[tool.avogadro.electrostatic-models.description]
+default = "Assign atomic partial charges according to the digits of Avogadro's number"
+de = "Partialladungen nach den Ziffern der Avogadro-Konstante zuordnen."
+
 
 [[tool.avogadro.file-formats]]
 identifier = "zyx"
@@ -88,18 +92,29 @@ support.write = true
 output-format = "xyz"
 input-format = "xyz"
 
+
 [[tool.avogadro.input-generators]]
 identifier = "qavocado"
 program-name = "Quantum Avocado"
 input-format = "cjson"
-user-options = "src/customization/qavocado_options.json"  # An optional path to a file specifying the options in the dialog
-highlight-styles = "src/customization/qavocado_syntax.json"  # An optional path to a file specifying syntax highlighting rules
+support.molecular = true
+support.periodic = false
+# Optional paths to files (JSON or TOML) specifying:
+user-options = "src/customization/qavocado_options.toml"  # options in the dialog
+highlight-styles = "src/customization/qavocado_syntax.toml"  # syntax highlighting rules
+
+
+# In these `menu-commands` examples, the flexibility of TOML is demonstrated --
+# all are reasonable ways to specify the `path` data, so do whatever's easiest
+# for you!
 
 [[tool.avogadro.menu-commands]]
 identifier = "transmute"
 input-format = "cjson"
-path.menu = "Build"  # The menu within which the command's menu entry should appear
-path.entry = { label = "Transmute into gold", priority = 300 }  # The text for the command's menu entry and its position within "Build"
+path.menu = "Build"  # The menu within which the command's menu item should appear
+path.item.label = "Transmute into gold" # The text for the command's menu item
+path.item.priority = 300 # The command item's position within "Build"
+
 
 # Entries with higher priority will come higher in the parent menu, so the three
 # following commands will appear in an Extensions > Demo submenu in the same
@@ -107,27 +122,41 @@ path.entry = { label = "Transmute into gold", priority = 300 }  # The text for t
 [[tool.avogadro.menu-commands]]
 identifier = "moveatom"
 input-format = "cjson"
-user-options = "src/customization/moveatom_options.json"
-path.menu = "Extensions"
-path.submenu = { menu = "Demo", priority = 500 }  # Priority determines the position of "Demo" within "Extensions"
-path.entry = { label = "Move Atom…", priority = 210 }  # Priority determines the position of "Move Atom…" within "Demo"
-de.path.submenu = { menu = "Beispiel", priority = 500 }
-de.path.entry = { label = "Atom verschieben…", priority = 210 }
+user-options = "customization/moveatom_options.json"
 
-[[tool.avogadro.menu-commands]]
-identifier = "moveall"
-input-format = "cjson"
-path.menu = "Extensions"
-path.submenu = { menu = "Demo", priority = 500 }
-path.entry = { label = "Move All", priority = 200 }
-de.path.submenu = { menu = "Beispiel", priority = 500 }
-de.path.entry = { label = "Alle verschieben", priority = 200 }
+[tool.avogadro.menu-commands.path]
+menu = "Extensions"
+submenu.priority = 500 # Priority determines the position of "Demo" within "Extensions"
+submenu.label = "Demo"
+item.priority = 210 # Priority determines the position of "Move Atom…" within "Demo"
+item.label = "Move Atom…"
+
 
 [[tool.avogadro.menu-commands]]
 identifier = "hello"
 input-format = "cjson"
 path.menu = "Extensions"
-path.submenu = { menu = "Demo", priority = 500 }
-path.entry = { label = "Say Hello", priority = 100 }
-de.path.submenu = { menu = "Beispiel", priority = 500 }
-de.path.entry = { label = "Begrüßen :)", priority = 100 }
+path.submenu.priority = 500
+path.item.priority = 100
+
+# Here we have a table specifically for the localization of each string
+[tool.avogadro.menu-commands.path.submenu.label]
+default = "Demo"
+de = "Beispiel"
+
+[tool.avogadro.menu-commands.path.item.label]
+default = "Say Hello"
+de = "Begrüßen :)"
+de_CH = "Begrüssen :)"
+
+
+[[tool.avogadro.menu-commands]]
+identifier = "moveall"
+input-format = "cjson"
+
+[tool.avogadro.menu-commands.path]
+menu = "Extensions"
+submenu.priority = 500
+submenu.label = { default = "Demo", de = "Beispiel" }
+item.priority = 200
+item.label = { default = "Move All", de = "Alle verschieben" }

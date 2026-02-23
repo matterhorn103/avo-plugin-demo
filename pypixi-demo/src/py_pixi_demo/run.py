@@ -1,9 +1,12 @@
 """A function to interpret the arguments passed to the plugin."""
 
 import json
+import sys
 
 def run(args):
-    avo_input = json.loads(args.input)
+    # The input for all feature types is passed as JSON on `stdin`
+    # This is easily parsed into a native Python `dict`
+    avo_input = json.load(sys.stdin)
     output = None
     match args.feature:
         # A large plugin can run faster if we only import the necessary feature
@@ -33,28 +36,18 @@ def run(args):
                     ]
                 }
         case "qavocado":
-            try:
-                from .qavocado import generate_files
-                # Parse the JSON strings
-                data = json.loads(args.input)
-                output = generate_files(data)
-            except Exception as e:
-                # If there's an error, let it be shown to the user
-                print(e)
-        # commands all receive a JSON as input, and we've asked
-        # (in `pyproject.toml`) for a CJSON in all cases
-        # They also all return a JSON as output, so let's handle them together
-        case _:
-            from .commands import do_alchemy, do_move, hello_world
-            cjson = avo_input["cjson"]
-            match args.feature:
-                case "transmute":
-                    output = do_alchemy(cjson)
-                # Handle the move commands together
-                case "moveatom" | "moveall":  
-                    output = do_move(avo_input, move_all=(args.feature == "moveall"))
-                case "hello":
-                    output = hello_world(avo_input)
+            from .qavocado import generate_files
+            output = generate_files(avo_input)
+        case "hello":
+            from .commands import hello_world
+            output = hello_world(avo_input)
+        case "transmute":
+            from .commands import do_alchemy
+            output = do_alchemy(avo_input["cjson"])
+        # Handle the move commands together
+        case "moveatom" | "moveall":
+            from .commands import do_move
+            output = do_move(avo_input, move_all=(args.feature == "moveall"))
     if output is not None:
         # Pass back to Avogadro
         print(json.dumps(output))

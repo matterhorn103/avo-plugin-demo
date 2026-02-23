@@ -31,38 +31,22 @@ def main():
     # Each feature gets its own subparser, where the `title` of each
     # subparser must match the `identifier` for the feature
     # We then add the arguments specific to each feature to its subparser
+    # Not all features take arguments other than the common shared ones above
 
     parser_charges = subparsers.add_parser("avogadro_charges")
-    parser_charges.add_argument("input")
     parser_charges.add_argument("--charges", action="store_true")
     parser_charges.add_argument("--potential", action="store_true")
 
-    parser_energy = subparsers.add_parser("stellar")
-    parser_energy.add_argument("input")
-
     parser_format = subparsers.add_parser("zyx")
-    parser_format.add_argument("input")
     parser_format.add_argument("--read", action="store_true")
     parser_format.add_argument("--write", action="store_true")
 
-    parser_generator = subparsers.add_parser("qavocado")
-    parser_generator.add_argument("input")
-    # If we had specified in `pyproject.toml` that the user options should be
-    # obtained dynamically, we would have to also handle the flag for it
+    # If we had specified in `pyproject.toml` that `user-options` should be
+    # obtained dynamically for our input generator, we would have to also handle
+    # the flag for it
+    #parser_generator = subparsers.add_parser("qavocado")
     #parser_generator.add_argument("--print-options")
 
-    parser_transmute = subparsers.add_parser("transmute")
-    parser_transmute.add_argument("input")
-
-    parser_moveatom = subparsers.add_parser("moveatom")
-    parser_moveatom.add_argument("input")
-
-    parser_moveall = subparsers.add_parser("moveall")
-    parser_moveall.add_argument("input")
-
-    parser_hello = subparsers.add_parser("hello")
-    parser_hello.add_argument("input")
-    
     # Now the parser knows what to expect, we actually parse the command
     args = parser.parse_args()
     # Regardless of whether subparsers were used or not, the feature that has

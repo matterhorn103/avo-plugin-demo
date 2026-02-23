@@ -3,6 +3,7 @@
 
 import argparse
 import json
+import sys
 
 
 def do_alchemy(cjson: dict):
@@ -13,12 +14,11 @@ def do_alchemy(cjson: dict):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("input")
     parser.add_argument("--lang", nargs="?", default="en")
     args = parser.parse_args()
 
     # Read input from Avogadro
-    avo_input = json.loads(args.input)
+    avo_input = json.load(sys.stdin)
     cjson = avo_input["cjson"]
     requested_atom = avo_input["options"]["selection"]
 

@@ -4,16 +4,17 @@ similar to that of Q-Chem."""
 
 import argparse
 import json
+import sys
 
 
-def generate_input_file(opts):
+def generate_input_file(opts) -> str:
     # Extract options:
-    title = opts["title"]
-    calc = opts["calc_type"]
-    theory = opts["theory"]
-    basis = opts["basis"]
-    charge = opts["charge"]
-    multiplicity = opts["multiplicity"]
+    title = opts["Title"]
+    calc = opts["Calculation Type"]
+    theory = opts["Theory"]
+    basis = opts["Basis"]
+    charge = opts["Charge"]
+    multiplicity = opts["Multiplicity"]
 
     # Convert to code-specific strings
     if calc == "Single Point":
@@ -68,15 +69,13 @@ def generate_input_file(opts):
     return "\n".join(output)
 
 
-def generate_files(avo_input: str):
-    # Parse the JSON strings
-    data = json.loads(avo_input)
+def generate_files(data: dict) -> dict:
 
     # Generate the input file
     input_file = generate_input_file(data["options"])
 
     # Get the basename for input files:
-    basename = data["options"]["filename_base"]
+    basename = data["options"]["Filename Base"]
 
     # Prepare the result
     result = {
@@ -94,7 +93,6 @@ def generate_files(avo_input: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("input")
     parser.add_argument("--lang", nargs="?", default="en")
     parser.add_argument("--debug", action="store_true")
     # If we had specified in `avogadro.toml` that the user options should be
@@ -102,9 +100,14 @@ if __name__ == "__main__":
     #parser.add_argument("--print-options")
     args = parser.parse_args()
 
+    avo_input = json.load(sys.stdin)
+
     try:
-        output = generate_files(args.input)
-        print(json.dumps(output))
+        output = generate_files(avo_input)
+    # If there's a problem, let it be shown to the user as a warning
     except Exception as e:
-        # If there's an error, let it be shown to the user
-        print(e)
+        result = {
+            "warnings": [str(e)],
+        }
+    
+    print(json.dumps(output))

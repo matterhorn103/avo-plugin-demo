@@ -3,6 +3,7 @@
 
 import argparse
 import json
+import sys
 
 
 def move_atoms(cjson: dict, atoms: list[int]):
@@ -14,12 +15,11 @@ def move_atoms(cjson: dict, atoms: list[int]):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("input")
     parser.add_argument("--lang", nargs="?", default="en")
     args = parser.parse_args()
 
     # Read input from Avogadro
-    avo_input = json.loads(args.input)
+    avo_input = json.load(sys.stdin)
     cjson = avo_input["cjson"]
     # Get selected atoms
     selected = []

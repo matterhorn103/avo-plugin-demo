@@ -1,0 +1,53 @@
+[Title]
+default = ""
+
+["Calculation Type"]
+default = 1
+values = [
+    "Single Point",
+    "Equilibrium Geometry",
+    "Frequencies",
+]
+
+[Theory]
+default = 2
+values = [
+    "HF",
+    "MP2",
+    "B3LYP",
+    "B3LYP5",
+    "EDF1",
+    "M062X",
+    "CCSD",
+]
+
+[Basis]
+default = 2
+values = [
+    "STO-3G",
+    "3-21G",
+    "6-31G(d)",
+    "6-31G(d,p)",
+    "6-31+G(d)",
+    "6-311G(d)",
+    "cc-pVDZ",
+    "cc-pVTZ",
+    "LANL2DZ",
+    "LACVP",
+]
+
+["Filename Base"]
+default = "job"
+
+[Charge]
+minimum = -9
+maximum = 9
+
+[Multiplicity]
+minimum = 1
+maximum = 6
+
+[Comment]
+type = "string"
+label = "Additional comments:"
+default = ""

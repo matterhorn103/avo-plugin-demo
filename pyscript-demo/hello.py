@@ -4,17 +4,17 @@ user."""
 
 import argparse
 import json
+import sys
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("input")
     parser.add_argument("--debug", action="store_true")
     parser.add_argument("--lang", nargs="?", default="en")
     args = parser.parse_args()
 
     # Always have to read input from Avogadro and pass cjson back
     # Otherwise molecule disappears
-    avo_input = json.loads(args.input)
+    avo_input = json.load(sys.stdin)
 
     # Extract number of times to shout hello from user's config
     # n_hello = avo_input["config"]["hello_repeats"]

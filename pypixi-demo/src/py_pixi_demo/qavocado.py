@@ -5,12 +5,12 @@ similar to that of Q-Chem."""
 
 def generate_input_file(opts) -> str:
     # Extract options:
-    title = opts["title"]
-    calc = opts["calc_type"]
-    theory = opts["theory"]
-    basis = opts["basis"]
-    charge = opts["charge"]
-    multiplicity = opts["multiplicity"]
+    title = opts["Title"]
+    calc = opts["Calculation Type"]
+    theory = opts["Theory"]
+    basis = opts["Basis"]
+    charge = opts["Charge"]
+    multiplicity = opts["Multiplicity"]
 
     # Convert to code-specific strings
     if calc == "Single Point":
@@ -68,20 +68,28 @@ def generate_input_file(opts) -> str:
 def generate_files(data: dict) -> dict:
 
     # Generate the input file
-    input_file = generate_input_file(data["options"])
+    try:
+        input_file = generate_input_file(data["options"])
 
-    # Get the basename for input files:
-    basename = data["options"]["filename_base"]
+        # Get the basename for input files:
+        basename = data["options"]["Filename Base"]
 
-    # Prepare the result
-    result = {
-        # Text of the input files generated
-        # If multiple have been generated they will appear in the same order in
-        # the GUI as they are listed in this array
-        "files": [
-            {"filename": f"{basename}.qcin", "contents": input_file}
-        ],
-        # The main input file
-        "mainFile": f"{basename}.qcin",
-    }
+        # Prepare the result
+        result = {
+            # Text of the input files generated
+            # If multiple have been generated they will appear in the same order in
+            # the GUI as they are listed in this array
+            "files": [
+                {"filename": f"{basename}.qcin", "contents": input_file}
+            ],
+            # The main input file
+            "mainFile": f"{basename}.qcin",
+        }
+    
+    # If there's a problem, let it be shown to the user as a warning
+    except Exception as e:
+        result = {
+            "warnings": [str(e)],
+        }
+    
     return result
