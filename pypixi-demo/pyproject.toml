@@ -21,7 +21,7 @@ dependencies = [
 avogadro-pypixi-demo = "pypixi_demo:main"
 
 # Some build system is always required for a package, but you are welcome to
-# choose whichever you like, it doesn't have to be uv_build
+# choose whichever you like, it doesn't have to be hatchling
 # It is recommended to specify one, but it is not required - if none is given
 # then a default will be used
 [build-system]
