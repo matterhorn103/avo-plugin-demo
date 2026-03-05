@@ -2,6 +2,10 @@
 """Generate input for the (fictional) Quantum Avocado program, whose syntax is
 similar to that of Q-Chem."""
 
+import argparse
+import json
+import sys
+
 
 def generate_input_file(opts) -> str:
     # Extract options:
@@ -68,28 +72,42 @@ def generate_input_file(opts) -> str:
 def generate_files(data: dict) -> dict:
 
     # Generate the input file
+    input_file = generate_input_file(data["options"])
+
+    # Get the basename for input files:
+    basename = data["options"]["Filename Base"]
+
+    # Prepare the result
+    result = {
+        # Text of the input files generated
+        # If multiple have been generated they will appear in the same order in
+        # the GUI as they are listed in this array
+        "files": [
+            {"filename": f"{basename}.qcin", "contents": input_file}
+        ],
+        # The main input file
+        "mainFile": f"{basename}.qcin",
+    }
+    return result
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--lang", nargs="?", default="en")
+    parser.add_argument("--debug", action="store_true")
+    # If we had specified in `avogadro.toml` that the user options should be
+    # obtained dynamically, we would have to also handle the flag for it
+    #parser.add_argument("--user-options")
+    args = parser.parse_args()
+
+    avo_input = json.load(sys.stdin)
+
     try:
-        input_file = generate_input_file(data["options"])
-
-        # Get the basename for input files:
-        basename = data["options"]["Filename Base"]
-
-        # Prepare the result
-        result = {
-            # Text of the input files generated
-            # If multiple have been generated they will appear in the same order in
-            # the GUI as they are listed in this array
-            "files": [
-                {"filename": f"{basename}.qcin", "contents": input_file}
-            ],
-            # The main input file
-            "mainFile": f"{basename}.qcin",
-        }
-    
+        output = generate_files(avo_input)
     # If there's a problem, let it be shown to the user as a warning
     except Exception as e:
         result = {
             "warnings": [str(e)],
         }
     
-    return result
+    print(json.dumps(output))

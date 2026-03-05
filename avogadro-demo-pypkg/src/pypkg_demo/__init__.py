@@ -45,7 +45,7 @@ def main():
     # obtained dynamically for our input generator, we would have to also handle
     # the flag for it
     #parser_generator = subparsers.add_parser("qavocado")
-    #parser_generator.add_argument("--print-options")
+    #parser_generator.add_argument("--user-options")
 
     # Now the parser knows what to expect, we actually parse the command
     args = parser.parse_args()

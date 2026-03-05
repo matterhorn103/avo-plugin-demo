@@ -1,5 +1,0 @@
-[[default.rules]]
-format.preset = "keyword"
-patterns = [
-    { regexp = '\$[a-z]+\s' },
-]

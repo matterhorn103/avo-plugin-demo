@@ -1,6 +1,11 @@
+################################################################################
+# General metadata
+################################################################################
+# Specified in the same way as normal Python package metadata, see
+# https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
 [project]
 # These fields are required:
-name = "pypkg-demo"
+name = "avogadro-demo-pypkg"  # Must begin with `avogadro-` and may not include underscores
 version = "6.0.2"
 description = "An example Python package plugin for Avogadro 2 to demonstrate the revamped plugin API in v2.0 onwards"
 authors = [
@@ -15,31 +20,61 @@ dependencies = [
     "platformdirs>=4.2.0",
 ]
 
-# Define the entry point for the plugin
-# The key is the command, which must be the plugin's name, prefixed with `avogadro-`
+
+################################################################################
+# Python package configuration
+################################################################################
+# The entry point for the plugin, that Avogadro runs
+# The key is the command, which must match the plugin's name
 # The entry point itself can be any function you like from within your package
 [project.scripts]
-avogadro-pypkg-demo = "pypkg_demo:main"
+avogadro-demo-pypkg = "avogadro_pypkg_demo:main"
 
 # Some build system is always required for a package, but you are welcome to
-# choose whichever you like, it doesn't have to be uv_build
+# choose whichever you like - `uv_build` and `hatchling` are good choices
 # It is recommended to specify one, but it is not required - if none is given
-# then a default will be used
+# then a default (`setuptools`) will be used
 [build-system]
-requires = ["uv_build>=0.10.2,<0.11.0"]
 build-backend = "uv_build"
+requires = ["uv_build>=0.10.2,<0.11.0"]
 
 
-# The [tool.avogadro] table tells Avogadro what your plugin needs and what it can do
+################################################################################
+# Pixi configuration
+################################################################################
+# Even if your plugin has no Conda dependencies and is a standard Python package
+# that doesn't require Pixi to function, you *must* include these Pixi tables!
+# If you have Pixi, you can run `pixi init` to set this up for you
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+# Just specify those platforms that your plugin works on
+platforms = ["linux-64", "linux-aarch64", "osx-64", "osx-arm64", "win-64"]
+# For reference, these are all the platforms that Avogadro ships for:
+#platforms = ["linux-64", "linux-aarch64", "osx-64", "osx-arm64", "win-64", "win-arm64"]
+
+# This is required for Avogadro to be able to run your plugin
+[tool.pixi.pypi-dependencies]
+avogadro_pypkg_demo = { path = ".", editable = true }  # Hyphens become underscores here
+
+# Any Conda dependencies that your plugin needs - may be empty
+[tool.pixi.dependencies]
+#numpy = ">=2.2.6"
+
+[tool.pixi.tasks]
+
+
+################################################################################
+# Avogadro metadata
+################################################################################
 [tool.avogadro]
 minimum-avogadro-version = "1.103"
 
-# Features provided by the plugin are listed in arrays of tables, by feature type
+# Features provided by the plugin are listed in arrays of tables by feature type
 # See https://toml.io/en/v1.0.0#array-of-tables
 
-# Each feature must specify an `identifier`, which must be the name of the script
-# that provides the feature
 [[tool.avogadro.energy-models]]
+# Each feature must specify an `identifier`, which is the first argument passed
+# to the plugin when Avogadro runs it
 identifier = "stellar"
 model-name = "STELLAR"
 input-format = "cjson"  # If true, Avogadro will always pass the CJSON as well as `input-format`
@@ -93,8 +128,8 @@ user-options = "src/customization/qavocado_options.toml"  # options in the dialo
 highlight-styles = "src/customization/qavocado_syntax.toml"  # syntax highlighting rules
 
 
-# In these `menu-commands` examples, the flexibility of TOML is demonstrated --
-# all are reasonable ways to specify the `path` data, so do whatever's easiest
+# In these `menu-commands` examples, the flexibility of TOML is demonstrated
+# All are reasonable ways to specify the `path` data, so do whatever's easiest
 # for you!
 
 [[tool.avogadro.menu-commands]]

@@ -1,5 +1,8 @@
-# First, some general metadata
-
+################################################################################
+# General metadata
+################################################################################
+# Specified in the same way as Python package metadata would be, see
+# https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
 # These fields are required:
 name = "pyscript-demo"
 version = "6.0.2"
@@ -11,26 +14,26 @@ license = "BSD-3-Clause"  # An SPDX license identifier, see https://spdx.org/lic
 # These fields are optional:
 readme = "README.md"
 
-# Second, tell Avogadro what your plugin needs and what it can do
 
+################################################################################
+# Avogadro metadata
+################################################################################
 minimum-avogadro-version = "1.103"
 
-# Features provided by the plugin are listed in arrays of tables, by feature type
+# Features provided by the plugin are listed in arrays of tables by feature type
 # See https://toml.io/en/v1.0.0#array-of-tables
-
-# Each feature must specify an `identifier`, which must be the name of the script
-# that provides the feature
 
 
 #[[electrostatic-models]]
-# See the pypkg/pypixi demos for an example of an `electrostatic-models` feature
+# See the pypkg demo for an example of an `electrostatic-models` feature
 
 
 #[[energy-models]]
-# See the pypkg/pypixi demos for an example of an `energy-models` feature
-
+# See the pypkg demo for an example of an `energy-models` feature
 
 [[file-formats]]
+# Each feature must specify an `identifier`, which must match the name of the
+# script that provides the feature - it may contain underscores
 identifier = "zyx"
 format-name = "ZYX format"
 file-extensions = [ "zyx" ]
@@ -53,8 +56,8 @@ user-options = "src/customization/qavocado_options.toml"  # options in the dialo
 highlight-styles = "src/customization/qavocado_syntax.toml"  # syntax highlighting rules
 
 
-# In these `menu-commands` examples, the flexibility of TOML is demonstrated --
-# all are reasonable ways to specify the `path` data, so do whatever's easiest
+# In these `menu-commands` examples, the flexibility of TOML is demonstrated
+# All are reasonable ways to specify the `path` data, so do whatever's easiest
 # for you!
 
 [[menu-commands]]
