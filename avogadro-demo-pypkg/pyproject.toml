@@ -131,16 +131,12 @@ user-options = "src/customization/qavocado_options.toml"  # options in the dialo
 highlight-styles = "src/customization/qavocado_syntax.toml"  # syntax highlighting rules
 
 
-# In these `menu-commands` examples, the flexibility of TOML is demonstrated
-# All are reasonable ways to specify the `path` data, so do whatever's easiest
-# for you!
-
 [[tool.avogadro.menu-commands]]
 identifier = "transmute"
 input-format = "cjson"
-path.menu = "Build"  # The menu within which the command's menu item should appear
-path.item.label = "Transmute into gold" # The text for the command's menu item
-path.item.priority = 300 # The command item's position within "Build"
+menu = "Build"  # The menu within which the command's menu item should appear
+item = "Transmute into gold"  # The text for the command's menu item
+priorities = [ 300 ]  # Determines the menu item's position within `menu`
 
 
 # Entries with higher priority will come higher in the parent menu, so the three
@@ -150,40 +146,37 @@ path.item.priority = 300 # The command item's position within "Build"
 identifier = "moveatom"
 input-format = "cjson"
 user-options = "src/customization/moveatom_options.json"
-
-[tool.avogadro.menu-commands.path]
 menu = "Extensions"
-submenu.priority = 500 # Priority determines the position of "Demo" within "Extensions"
-submenu.label = "Demo"
-item.priority = 210 # Priority determines the position of "Move Atom…" within "Demo"
-item.label = "Move Atom…"
+submenu = "Demo"
+item = "Move Atom…"
+priorities = [
+    500, # The priority of `submenu` ("Demo") within `menu` ("Extensions")
+    210, # The priority of `item` ("Move Atom…") within `submenu` ("Demo")
+]
 
 
-[[tool.avogadro.menu-commands]]
-identifier = "hello"
-input-format = "cjson"
-path.menu = "Extensions"
-path.submenu.priority = 500
-path.item.priority = 100
-
-# Here we have a table specifically for the localization of each string
-[tool.avogadro.menu-commands.path.submenu.label]
-default = "Demo"
-de = "Beispiel"
-
-[tool.avogadro.menu-commands.path.item.label]
-default = "Say Hello"
-de = "Begrüßen :)"
-de_CH = "Begrüssen :)"
-
-
+# Here we localize the menu/item strings using in-line tables
 [[tool.avogadro.menu-commands]]
 identifier = "moveall"
 input-format = "cjson"
-
-[tool.avogadro.menu-commands.path]
 menu = "Extensions"
-submenu.priority = 500
-submenu.label = { default = "Demo", de = "Beispiel" }
-item.priority = 200
-item.label = { default = "Move All", de = "Alle verschieben" }
+submenu = { default = "Demo", de = "Beispiel" }
+item = { default = "Move All", de = "Alle verschieben" }
+priorities = [ 500, 200 ]
+
+
+# Here we localize the menu/item strings using a table for each string
+[[tool.avogadro.menu-commands]]
+identifier = "hello"
+input-format = "cjson"
+menu = "Extensions"
+priorities = [ 500, 100 ]
+
+[tool.avogadro.menu-commands.submenu]
+default = "Demo"
+de = "Beispiel"
+
+[tool.avogadro.menu-commands.item]
+default = "Say Hello"
+de = "Begrüßen :)"
+de_CH = "Begrüssen :)"
