@@ -4,7 +4,7 @@
 # Specified in the same way as Python package metadata would be, see
 # https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
 # These fields are required:
-name = "pyscript-demo"
+name = "avogadro-demo-pyscript"  # Must begin with `avogadro-` and may not include underscores
 version = "6.0.2"
 description = "An example Python script plugin for Avogadro 2 to demonstrate the revamped plugin API in v2.0 onwards"
 authors = [
