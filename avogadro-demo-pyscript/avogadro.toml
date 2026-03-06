@@ -52,8 +52,8 @@ input-format = "cjson"
 support.molecular = true
 support.periodic = false
 # Optional paths to files (JSON or TOML) specifying:
-user-options = "src/customization/qavocado_options.toml"  # options in the dialog
-highlight-styles = "src/customization/qavocado_syntax.toml"  # syntax highlighting rules
+user-options = "customization/qavocado_options.toml"  # options in the dialog
+highlight-styles = "customization/qavocado_syntax.toml"  # syntax highlighting rules
 
 
 # In these `menu-commands` examples, the flexibility of TOML is demonstrated

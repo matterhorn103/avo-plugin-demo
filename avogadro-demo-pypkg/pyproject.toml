@@ -29,7 +29,7 @@ dependencies = [
 # The key is the command, which must match the plugin's name
 # The entry point itself can be any function you like from within your package
 [project.scripts]
-avogadro-demo-pypkg = "avogadro_pypkg_demo:main"
+avogadro-demo-pypkg = "avogadro_demo_pypkg:main"
 
 # Some build system is always required for a package, but you are welcome to
 # choose whichever you like - `uv_build` and `hatchling` are good choices
@@ -149,7 +149,7 @@ path.item.priority = 300 # The command item's position within "Build"
 [[tool.avogadro.menu-commands]]
 identifier = "moveatom"
 input-format = "cjson"
-user-options = "customization/moveatom_options.json"
+user-options = "src/customization/moveatom_options.json"
 
 [tool.avogadro.menu-commands.path]
 menu = "Extensions"
