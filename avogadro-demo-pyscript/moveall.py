@@ -15,6 +15,7 @@ def move_atoms(cjson: dict, atoms: list[int]):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("--debug", action="store_true")
     parser.add_argument("--lang", nargs="?", default="en")
     args = parser.parse_args()
 
