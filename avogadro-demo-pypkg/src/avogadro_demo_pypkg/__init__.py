@@ -52,6 +52,7 @@ def main():
 
     # Not all features take arguments other than the common shared ones above
     subparsers.add_parser("stellar", parents=[common])
+    subparsers.add_parser("transmute", parents=[common])
     subparsers.add_parser("moveatom", parents=[common])
     subparsers.add_parser("moveall", parents=[common])
     subparsers.add_parser("hello", parents=[common])
