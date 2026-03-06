@@ -43,7 +43,7 @@ def run(args):
             output = hello_world(avo_input)
         case "transmute":
             from .commands import do_alchemy
-            output = do_alchemy(avo_input["cjson"])
+            output = do_alchemy(avo_input)
         # Handle the move commands together
         case "moveatom" | "moveall":
             from .commands import do_move
