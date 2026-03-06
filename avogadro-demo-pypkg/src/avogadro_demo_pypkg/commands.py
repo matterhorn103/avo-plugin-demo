@@ -38,18 +38,19 @@ def do_move(avo_input: dict, move_all: bool) -> dict:
 
     if move_all:
         # Get selected atoms
-        selected = []
-        selected_flags = cjson["atoms"]["selected"]  # 1 for selected, 0 for not
-        n_atoms = len(selected_flags)
-        for i, status in enumerate(selected_flags):
-            if status == 1:
-                selected.append(i)
-        # If nothing is selected, move everything
-        if len(selected) == 0:
+        selected_flags = cjson["atoms"].get("selected", None)  # 1 for selected, 0 for not
+        if selected_flags:
+            n_atoms = len(selected_flags)
+            selected = []
+            for i, status in enumerate(selected_flags):
+                if status == 1:
+                    selected.append(i)
+        else:
+            # If nothing is selected, move everything
             n_atoms = len(cjson["atoms"]["elements"]["number"])
             selected = list(range(n_atoms))
     else:
-        selected = list(avo_input["options"]["selection"])
+        selected = [avo_input["options"]["selection"]]
     
     # Make the appropriate changes
     move_atoms(cjson, selected)
