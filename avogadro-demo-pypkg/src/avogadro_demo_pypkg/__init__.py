@@ -17,9 +17,6 @@ def main():
 
     # First we create a main parser
     parser = argparse.ArgumentParser()
-    # We can capture common shared arguments immediately for all features
-    parser.add_argument("--lang", nargs="?", default="en")
-    parser.add_argument("--debug", action="store_true")
 
     # If our plugin only provided one type of feature, we could capture all the
     # arguments at this point, because they'd be the same for all features, and
@@ -28,24 +25,36 @@ def main():
 
     # When the args for each feature differ, we have to delegate to subparsers
     subparsers = parser.add_subparsers(dest="feature")
+
     # Each feature gets its own subparser, where the `title` of each
     # subparser must match the `identifier` for the feature
     # We then add the arguments specific to each feature to its subparser
-    # Not all features take arguments other than the common shared ones above
 
-    parser_charges = subparsers.add_parser("avogadro_charges")
+    # We can also define common shared arguments and have all feature parsers
+    # inherit them without having to define them for every feature separately
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("--lang", nargs="?", default="en")
+    common.add_argument("--debug", action="store_true")
+
+    parser_charges = subparsers.add_parser("avogadro_charges", parents=[common])
     parser_charges.add_argument("--charges", action="store_true")
     parser_charges.add_argument("--potential", action="store_true")
 
-    parser_format = subparsers.add_parser("zyx")
+    parser_format = subparsers.add_parser("zyx", parents=[common])
     parser_format.add_argument("--read", action="store_true")
     parser_format.add_argument("--write", action="store_true")
 
+    parser_generator = subparsers.add_parser("qavocado", parents=[common])  # noqa: F841
     # If we had specified in `pyproject.toml` that `user-options` should be
     # obtained dynamically for our input generator, we would have to also handle
     # the flag for it
-    #parser_generator = subparsers.add_parser("qavocado")
     #parser_generator.add_argument("--user-options")
+
+    # Not all features take arguments other than the common shared ones above
+    subparsers.add_parser("stellar", parents=[common])
+    subparsers.add_parser("moveatom", parents=[common])
+    subparsers.add_parser("moveall", parents=[common])
+    subparsers.add_parser("hello", parents=[common])
 
     # Now the parser knows what to expect, we actually parse the command
     args = parser.parse_args()
