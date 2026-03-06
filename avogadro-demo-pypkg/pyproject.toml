@@ -80,7 +80,7 @@ minimum-avogadro-version = "1.103"
 # to the plugin when Avogadro runs it
 identifier = "stellar"
 model-name = "STELLAR"
-input-format = "cjson"  # If true, Avogadro will always pass the CJSON as well as `input-format`
+input-format = "cjson"
 support.gradients = false
 support.elements = "1-42, 44-60, 62-94"  # Those with stable isotopes
 support.unit-cell = false
@@ -93,7 +93,7 @@ description = "A model that causes molecules to either explode or implode"
 identifier = "avogadro_charges"  # Unlike the plugin name, feature identifiers may contain underscores
 model-name = "N_A"
 input-format = "sdf"
-input-cjson = true
+input-cjson = true  # If true, Avogadro will always pass the CJSON as well as `input-format`
 support.elements = "1-86"  # up to Radon
 support.charges = true
 support.potentials = false
