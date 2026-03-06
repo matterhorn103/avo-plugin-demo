@@ -15,6 +15,7 @@ license = "BSD-3-Clause"  # An SPDX license identifier, see https://spdx.org/lic
 # These fields are optional:
 readme = "README.md"
 requires-python = ">=3.10"  # If you choose to specify this, please follow the Avogadro Python version policy!
+# Dependencies that should be sourced from PyPI, the Python Package Index
 dependencies = [
     "numpy>=2.2.6",
     "platformdirs>=4.2.0",
@@ -28,7 +29,7 @@ dependencies = [
 # The key is the command, which must match the plugin's name
 # The entry point itself can be any function you like from within your package
 [project.scripts]
-avogadro-demo-pypkg = "avogadro_pypkg_demo:main"
+#avogadro-demo-pypkg = "avogadro_pypkg_demo:main"
 
 # Some build system is always required for a package, but you are welcome to
 # choose whichever you like - `uv_build` and `hatchling` are good choices
@@ -52,9 +53,11 @@ platforms = ["linux-64", "linux-aarch64", "osx-64", "osx-arm64", "win-64"]
 # For reference, these are all the platforms that Avogadro ships for:
 #platforms = ["linux-64", "linux-aarch64", "osx-64", "osx-arm64", "win-64", "win-arm64"]
 
-# This is required for Avogadro to be able to run your plugin
+# The plugin package itself must be listed here as an editable dependency in
+# order for Avogadro to be able to run your plugin
+# Do NOT list any other PyPI dependencies here! Specify them under `project.dependencies`
 [tool.pixi.pypi-dependencies]
-avogadro_pypkg_demo = { path = ".", editable = true }  # Hyphens become underscores here
+avogadro-demo-pypkg = { path = ".", editable = true }
 
 # Any Conda dependencies that your plugin needs - may be empty
 [tool.pixi.dependencies]
