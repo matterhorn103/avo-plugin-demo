@@ -136,7 +136,7 @@ identifier = "transmute"
 input-format = "cjson"
 menu = "Build"  # The menu within which the command's menu item should appear
 item = "Transmute into gold"  # The text for the command's menu item
-priorities = [ 300 ]  # Determines the menu item's position within `menu`
+menu-priorities = [ 300 ]  # Determines the menu item's position within `menu`
 
 
 # Entries with higher priority will come higher in the parent menu, so the three
@@ -149,7 +149,7 @@ user-options = "src/customization/moveatom_options.json"
 menu = "Extensions"
 submenu = "Demo"
 item = "Move Atom…"
-priorities = [
+menu-priorities = [
     500, # The priority of `submenu` ("Demo") within `menu` ("Extensions")
     210, # The priority of `item` ("Move Atom…") within `submenu` ("Demo")
 ]
@@ -162,7 +162,7 @@ input-format = "cjson"
 menu = "Extensions"
 submenu = { default = "Demo", de = "Beispiel" }
 item = { default = "Move All", de = "Alle verschieben" }
-priorities = [ 500, 200 ]
+menu-priorities = [ 500, 200 ]
 
 
 # Here we localize the menu/item strings using a table for each string
@@ -170,7 +170,7 @@ priorities = [ 500, 200 ]
 identifier = "hello"
 input-format = "cjson"
 menu = "Extensions"
-priorities = [ 500, 100 ]
+menu-priorities = [ 500, 100 ]
 
 [tool.avogadro.menu-commands.submenu]
 default = "Demo"
